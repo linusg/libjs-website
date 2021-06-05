@@ -1,0 +1,111 @@
+:root {
+  --font-family: "Roboto", sans-serif;
+  --font-family-heading: "Montserrat", sans-serif;
+  --color-highlight: #1d60df;
+  --color-text: #312f2f;
+  --color-background: #f6fcfc;
+  --color-background-alt: #dfecec;
+  --color-chart-point-border: rgba(0, 0, 0, 0.3);
+  --color-chart-passed: #19db6e;
+  --color-chart-failed: #f70c4e;
+  --color-chart-skipped: #ffca28;
+  --color-chart-metadata-error: #5c6bc0;
+  --color-chart-harness-error: #26a69a;
+  --color-chart-timeout-error: #26c6da;
+  --color-chart-process-error: #ab47bc;
+  --color-chart-runner-exception: #ff7043;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-highlight: #03a9f4;
+    --color-text: #dddddd;
+    --color-background: #191922;
+    --color-background-alt: #262635;
+    --color-chart-point-border: rgba(255, 255, 255, 0.5);
+    --color-chart-passed: #18b55d;
+    --color-chart-failed: #c80f43;
+    --color-chart-skipped: #ffb300;
+    --color-chart-metadata-error: #3949ab;
+    --color-chart-harness-error: #00897b;
+    --color-chart-timeout-error: #00acc1;
+    --color-chart-process-error: #8e24aa;
+    --color-chart-runner-exception: #f4511e;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  letter-spacing: 0.2px;
+  line-height: 1.5;
+  padding: 20px;
+}
+
+main,
+footer {
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+footer {
+  text-align: center;
+}
+
+section {
+  margin-top: 40px;
+}
+
+p {
+  margin: 20px 0;
+}
+
+h1,
+h2 {
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+a,
+a:active,
+a:hover,
+a:visited {
+  color: var(--color-highlight);
+}
+
+h2 a {
+  text-decoration-thickness: 2px;
+}
+
+code {
+  display: inline-block;
+  padding: 0 2px;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: var(--color-background-alt);
+}
+
+.chart-wrapper {
+  height: max(50vh, 400px);
+  background: var(--color-background-alt);
+  border-radius: 10px;
+  padding: 20px;
+}

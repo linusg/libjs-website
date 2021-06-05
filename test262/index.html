@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LibJS test262 results</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap"
+    />
+  </head>
+  <body>
+    <main>
+      <h1>LibJS test262 results</h1>
+      <p>
+        These are the results of the
+        <a
+          href="https://github.com/SerenityOS/serenity"
+          target="_blank"
+          rel="noopener noreferrer"
+          >SerenityOS</a
+        >
+        JavaScript engine, LibJS, running the official ECMAScript conformance
+        test suite
+        <a
+          href="https://github.com/tc39/test262"
+          target="_blank"
+          rel="noopener noreferrer"
+          >test262</a
+        >
+        as well as the
+        <a
+          href="https://github.com/tc39/test262-parser-tests"
+          target="_blank"
+          rel="noopener noreferrer"
+          >test262 parser tests</a
+        >. All tests are re-run and the results updated automatically for every
+        push to the master branch of the repository on GitHub. Dates and times
+        are shown in your browser's timezone. Development of the engine started
+        in March 2020 (see
+        <a
+          href="https://www.youtube.com/watch?v=byNwCHc_IIM"
+          target="_blank"
+          rel="noopener noreferrer"
+          >this YouTube video</a
+        >), continuous running of test262 in June 2021 (see
+        <a
+          href="https://github.com/SerenityOS/serenity/pull/7816"
+          target="_blank"
+          rel="noopener noreferrer"
+          >this PR on GitHub</a
+        >) &mdash; results before that time are not available.
+      </p>
+      <p>
+        The source code of the LibJS test262 runner and aggregation script is
+        available
+        <a
+          href="https://github.com/linusg/libjs-test262"
+          target="_blank"
+          rel="noopener noreferrer"
+          >here</a
+        >, the source code of this website
+        <a
+          href="https://github.com/linusg/libjs-website"
+          target="_blank"
+          rel="noopener noreferrer"
+          >here</a
+        >, and the raw data
+        <a
+          href="https://github.com/linusg/libjs-website/blob/main/test262/data/results.json"
+          target="_blank"
+          rel="noopener noreferrer"
+          >here</a
+        >
+        (JSON).
+      </p>
+      <p>
+        If you have any questions or want to help out with improving these test
+        scores, feel free to get in touch on the
+        <a
+          href="https://discord.com/invite/29gCcKsXkF"
+          target="_blank"
+          rel="noopener noreferrer"
+          >SerenityOS Discord server</a
+        >
+        (<code>#browser</code>).
+      </p>
+      <section>
+        <h2>test262</h2>
+        <p id="summary-test262">Loading...</p>
+        <div class="chart-wrapper">
+          <canvas id="chart-test262"></canvas>
+        </div>
+      </section>
+      <section>
+        <h2>test262 parser tests</h2>
+        <p id="summary-test262-parser-tests">Loading...</p>
+        <div class="chart-wrapper">
+          <canvas id="chart-test262-parser-tests"></canvas>
+        </div>
+      </section>
+    </main>
+    <footer>
+      Made by
+      <a
+        href="https://twitter.com/linusgroh"
+        target="_blank"
+        rel="noopener noreferrer"
+        >@linusgroh</a
+      >.
+    </footer>
+    <script src="https://unpkg.com/luxon@1.27.0"></script>
+    <script src="https://unpkg.com/chart.js@3.3.2"></script>
+    <script src="https://unpkg.com/chartjs-adapter-luxon@1.0.0"></script>
+    <script src="main.js"></script>
+    <noscript
+      ><img
+        src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/pixel.gif"
+    /></noscript>
+    <script
+      defer
+      src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/script.js"
+    ></script>
+  </body>
+</html>
