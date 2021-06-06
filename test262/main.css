@@ -104,7 +104,7 @@ code {
 }
 
 .chart-wrapper {
-  height: max(80vh, 400px);
+  height: max(50vh, 400px);
   background: var(--color-background-alt);
   border-radius: 10px;
   padding: 20px;
