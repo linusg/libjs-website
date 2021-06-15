@@ -146,6 +146,18 @@
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
+          zoom: {
+            zoom: {
+              mode: "x",
+              wheel: {
+                enabled: true,
+              },
+            },
+            pan: {
+              enabled: true,
+              mode: "x",
+            },
+          },
           tooltip: {
             mode: "index",
             usePointStyle: true,
