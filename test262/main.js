@@ -65,20 +65,25 @@
 
   function prepareDataForCharts(data) {
     const charts = {
-      test262: {
-        data: {
-          [TestResult.PASSED]: [],
-          [TestResult.FAILED]: [],
-          [TestResult.SKIPPED]: [],
-          [TestResult.METADATA_ERROR]: [],
-          [TestResult.HARNESS_ERROR]: [],
-          [TestResult.TIMEOUT_ERROR]: [],
-          [TestResult.PROCESS_ERROR]: [],
-          [TestResult.RUNNER_EXCEPTION]: [],
-        },
-        datasets: [],
-        metadata: [],
-      },
+      ...Object.fromEntries(
+        ["test262", "test262-bytecode"].map((name) => [
+          name,
+          {
+            data: {
+              [TestResult.PASSED]: [],
+              [TestResult.FAILED]: [],
+              [TestResult.SKIPPED]: [],
+              [TestResult.METADATA_ERROR]: [],
+              [TestResult.HARNESS_ERROR]: [],
+              [TestResult.TIMEOUT_ERROR]: [],
+              [TestResult.PROCESS_ERROR]: [],
+              [TestResult.RUNNER_EXCEPTION]: [],
+            },
+            datasets: [],
+            metadata: [],
+          },
+        ])
+      ),
       ["test262-parser-tests"]: {
         data: {
           [TestResult.PASSED]: [],
@@ -90,7 +95,9 @@
     };
     for (const entry of data) {
       for (const chart in charts) {
-        const results = entry.tests[chart].results;
+        const results = entry.tests[chart]?.results;
+        if (!results)
+          continue;
         charts[chart].metadata.push({
           commitTimestamp: entry.commit_timestamp,
           runTimestamp: entry.run_timestamp,
@@ -286,6 +293,10 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
     const { charts } = prepareDataForCharts(data);
     initializeChart(document.getElementById("chart-test262"), charts.test262);
     initializeChart(
+      document.getElementById("chart-test262-bytecode"),
+      charts["test262-bytecode"]
+    );
+    initializeChart(
       document.getElementById("chart-test262-parser-tests"),
       charts["test262-parser-tests"]
     );
@@ -296,6 +307,13 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       last.versions.serenity,
       last.tests.test262.duration,
       last.tests.test262.results
+    );
+    initializeSummary(
+      document.getElementById("summary-test262-bytecode"),
+      last.run_timestamp,
+      last.versions.serenity,
+      last.tests["test262-bytecode"].duration,
+      last.tests["test262-bytecode"].results
     );
     initializeSummary(
       document.getElementById("summary-test262-parser-tests"),
