@@ -224,8 +224,11 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
             labels: {
               usePointStyle: true,
               boxWidth: 10,
-              // Only include failed, passed, and skipped in the legend
-              filter: ({ datasetIndex }) => datasetIndex < 3,
+              // Only include passed, failed, and crashed in the legend
+              filter: ({ text }) =>
+                text === TestResultLabels[TestResult.PASSED] ||
+                text === TestResultLabels[TestResult.FAILED] ||
+                text === TestResultLabels[TestResult.PROCESS_ERROR],
             },
           },
         },
