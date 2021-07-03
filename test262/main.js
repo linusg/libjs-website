@@ -96,8 +96,9 @@
     for (const entry of data) {
       for (const chart in charts) {
         const results = entry.tests[chart]?.results;
-        if (!results)
+        if (!results) {
           continue;
+        }
         charts[chart].metadata.push({
           commitTimestamp: entry.commit_timestamp,
           runTimestamp: entry.run_timestamp,
