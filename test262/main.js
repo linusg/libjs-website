@@ -56,10 +56,10 @@
     [TestResult.PASSED]: "Passed",
     [TestResult.FAILED]: "Failed",
     [TestResult.SKIPPED]: "Skipped",
-    [TestResult.METADATA_ERROR]: "Test metadata failed to parse",
-    [TestResult.HARNESS_ERROR]: "Test harness file failed to parse or run",
-    [TestResult.TIMEOUT_ERROR]: "Test run timed out",
-    [TestResult.PROCESS_ERROR]: "Test run crashed",
+    [TestResult.METADATA_ERROR]: "Metadata failed to parse",
+    [TestResult.HARNESS_ERROR]: "Harness file failed to parse or run",
+    [TestResult.TIMEOUT_ERROR]: "Timed out",
+    [TestResult.PROCESS_ERROR]: "Crashed",
     [TestResult.RUNNER_EXCEPTION]: "Unhandled runner exception",
   };
 
