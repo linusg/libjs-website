@@ -61,6 +61,7 @@
     [TestResult.TIMEOUT_ERROR]: "Timed out",
     [TestResult.PROCESS_ERROR]: "Crashed",
     [TestResult.RUNNER_EXCEPTION]: "Unhandled runner exception",
+    [TestResult.EXECUTION_TIME]: "Execution time",
   };
 
   function prepareDataForCharts(data) {
@@ -88,6 +89,13 @@
         data: {
           [TestResult.PASSED]: [],
           [TestResult.FAILED]: [],
+        },
+        datasets: [],
+        metadata: [],
+      },
+      ["test262-performance-tests"]: {
+        data: {
+          [TestResult.EXECUTION_TIME]: [],
         },
         datasets: [],
         metadata: [],
@@ -140,7 +148,7 @@
     return { charts };
   }
 
-  function initializeChart(element, { datasets, metadata }) {
+  function initializeChart(element, { datasets, metadata }, xAxisTitle = "Time", yAxisTitle = "Number of tests") {
     const ctx = element.getContext("2d");
 
     new Chart(ctx, {
@@ -237,7 +245,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
             type: "time",
             title: {
               display: true,
-              text: "Time",
+              text: xAxisTitle,
             },
             grid: {
               borderColor: textColor,
@@ -249,7 +257,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
             stacked: true,
             title: {
               display: true,
-              text: "Number of tests",
+              text: yAxisTitle,
             },
             grid: {
               borderColor: textColor,
@@ -304,6 +312,12 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       document.getElementById("chart-test262-parser-tests"),
       charts["test262-parser-tests"]
     );
+    initializeChart(
+      document.getElementById("chart-test262-performance-tests"),
+      charts["test262-performance-tests"],
+      "Date/time",
+      "Execution time"
+    );
     const last = data.slice(-1)[0];
     initializeSummary(
       document.getElementById("summary-test262"),
@@ -326,6 +340,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       last.tests["test262-parser-tests"].duration,
       last.tests["test262-parser-tests"].results
     );
+    // TODO: Init summary for performance
   }
 
   document.addEventListener("DOMContentLoaded", () => {
