@@ -140,9 +140,8 @@
 
     // chart-test262-performance-tests
     for (const entry of data) {
-      const dateTimeo = DateTime.fromSeconds(entry.commit_timestamp);
-
-      if (dateTimeo > performanceChartStartDateTime) {
+      const dt = DateTime.fromSeconds(entry.commit_timestamp);
+      if (dt > performanceChartStartDateTime) {
         const referenceChart = entry.tests["test262"];
         const chart = charts["test262-performance-tests"];
         const results = referenceChart?.results;
@@ -165,8 +164,8 @@
 
     // chart-test262-bytecode-performance-tests
     for (const entry of data) {
-      const dateTimeo = DateTime.fromSeconds(entry.commit_timestamp);
-      if (dateTimeo > performanceChartStartDateTime) {
+      const dt = DateTime.fromSeconds(entry.commit_timestamp);
+      if (dt > performanceChartStartDateTime) {
         const referenceChart = entry.tests["test262-bytecode"];
         const chart = charts["test262-bytecode-performance-tests"];
         const results = referenceChart?.results;
