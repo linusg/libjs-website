@@ -138,10 +138,10 @@
 
     const performanceChartStartDateTime = DateTime.fromISO("2021-07-04");
 
-    // chart-test262-performance-tests
     for (const entry of data) {
       const dt = DateTime.fromSeconds(entry.commit_timestamp);
       if (dt > performanceChartStartDateTime) {
+        // chart-test262-performance-tests
         const referenceChart = entry.tests["test262"];
         const chart = charts["test262-performance-tests"];
         const results = referenceChart?.results;
@@ -159,30 +159,24 @@
           x: entry.commit_timestamp * 1000,
           y: referenceChart.duration,
         });
-      }
-    }
 
-    // chart-test262-bytecode-performance-tests
-    for (const entry of data) {
-      const dt = DateTime.fromSeconds(entry.commit_timestamp);
-      if (dt > performanceChartStartDateTime) {
-        const referenceChart = entry.tests["test262-bytecode"];
-        const chart = charts["test262-bytecode-performance-tests"];
-        const results = referenceChart?.results;
-        if (!results) {
-          continue;
+        // chart-test262-bytecode-performance-tests
+        const byteCodeReferenceChart = entry.tests["test262-bytecode"];
+        const byteCodeChart = charts["test262-bytecode-performance-tests"];
+        const byteCodeResults = byteCodeReferenceChart?.results;
+        if (byteCodeReferenceChart) {
+          chart.metadata.push({
+            commitTimestamp: entry.commit_timestamp,
+            runTimestamp: entry.run_timestamp,
+            duration: referenceChart.duration,
+            versions: entry.versions,
+            total: byteCodeResults.total,
+          });
+          byteCodeChart.data["duration"].push({
+            x: entry.commit_timestamp * 1000,
+            y: byteCodeReferenceChart.duration,
+          });
         }
-        chart.metadata.push({
-          commitTimestamp: entry.commit_timestamp,
-          runTimestamp: entry.run_timestamp,
-          duration: referenceChart.duration,
-          versions: entry.versions,
-          total: results.total,
-        });
-        chart.data["duration"].push({
-          x: entry.commit_timestamp * 1000,
-          y: referenceChart.duration,
-        });
       }
     }
 
