@@ -63,7 +63,7 @@
     [TestResult.PROCESS_ERROR]: "Crashed",
     [TestResult.RUNNER_EXCEPTION]: "Unhandled runner exception",
     [TestResult.EXECUTION_TIME]: "Execution time",
-    [TestResult.DURATION]: "Duration",
+    [TestResult.DURATION]: "Duration (seconds)",
   };
 
   function prepareDataForCharts(data) {
@@ -386,13 +386,13 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       document.getElementById("chart-test262-performance-tests"),
       charts["test262-performance-tests"],
       "Time",
-      "Duration"
+      TestResultLabels[TestResult.DURATION]
     );
     initializeChart(
       document.getElementById("chart-test262-bytecode-performance-tests"),
       charts["test262-bytecode-performance-tests"],
       "Time",
-      "Duration"
+      TestResultLabels[TestResult.DURATION]
     );
     const last = data.slice(-1)[0];
     initializeSummary(
