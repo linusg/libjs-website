@@ -199,9 +199,7 @@
       delete charts[chart].data;
     }
 
-    return {
-      charts,
-    };
+    return { charts };
   }
 
   function initializeChart(
@@ -244,9 +242,7 @@
             titleColor: textColor,
             bodyColor: textColor,
             footerColor: textColor,
-            footerFont: {
-              weight: "normal",
-            },
+            footerFont: { weight: "normal" },
             footerMarginTop: 20,
             backgroundColor: backgroundColor,
             callbacks: {
@@ -415,10 +411,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
     const headers = new Headers();
     headers.append("pragma", "no-cache");
     headers.append("cache-control", "no-cache");
-    fetch(new Request("data/results.json"), {
-      method: "GET",
-      headers,
-    })
+    fetch(new Request("data/results.json"), { method: "GET", headers })
       .then((response) => response.json())
       .then((data) => {
         data.sort((a, b) =>
