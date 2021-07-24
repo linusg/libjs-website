@@ -20,6 +20,10 @@
   Chart.defaults.font.family = fontFamily;
   Chart.defaults.font.size = fontSize;
 
+  // This is when we started running the tests on Idan's self-hosted runner. Before that,
+  // durations varied a lot across runs. See https://github.com/SerenityOS/serenity/pull/7718.
+  const PERFORMANCE_CHART_START_DATE_TIME = DateTime.fromISO("2021-07-04");
+
   const TestResult = {
     PASSED: "passed",
     FAILED: "failed",
@@ -62,7 +66,6 @@
     [TestResult.TIMEOUT_ERROR]: "Timed out",
     [TestResult.PROCESS_ERROR]: "Crashed",
     [TestResult.RUNNER_EXCEPTION]: "Unhandled runner exception",
-    [TestResult.EXECUTION_TIME]: "Execution time",
     [TestResult.DURATION]: "Duration (seconds)",
   };
 
@@ -96,14 +99,14 @@
         datasets: [],
         metadata: [],
       },
-      ["test262-performance-tests"]: {
+      ["test262-performance"]: {
         data: {
           [TestResult.DURATION]: [],
         },
         datasets: [],
         metadata: [],
       },
-      ["test262-bytecode-performance-tests"]: {
+      ["test262-bytecode-performance"]: {
         data: {
           [TestResult.DURATION]: [],
         },
@@ -111,70 +114,65 @@
         metadata: [],
       },
     };
+
     for (const entry of data) {
       for (const chart in charts) {
         const results = entry.tests[chart]?.results;
-        if (!results) {
-          continue;
-        }
-        charts[chart].metadata.push({
-          commitTimestamp: entry.commit_timestamp,
-          runTimestamp: entry.run_timestamp,
-          duration: entry.tests[chart].duration,
-          versions: entry.versions,
-          total: results.total,
-        });
-        for (const testResult in results) {
-          if (testResult === "total") {
-            continue;
-          }
-          charts[chart].data[testResult].push({
-            x: entry.commit_timestamp * 1000,
-            y: results[testResult],
-          });
-        }
-      }
-    }
-
-    const performanceChartStartDateTime = DateTime.fromISO("2021-07-04");
-
-    for (const entry of data) {
-      const dt = DateTime.fromSeconds(entry.commit_timestamp);
-      if (dt > performanceChartStartDateTime) {
-        // chart-test262-performance-tests
-        const referenceChart = entry.tests["test262"];
-        const chart = charts["test262-performance-tests"];
-        const results = referenceChart?.results;
-        if (!results) {
-          continue;
-        }
-        chart.metadata.push({
-          commitTimestamp: entry.commit_timestamp,
-          runTimestamp: entry.run_timestamp,
-          duration: referenceChart.duration,
-          versions: entry.versions,
-          total: results.total,
-        });
-        chart.data["duration"].push({
-          x: entry.commit_timestamp * 1000,
-          y: referenceChart.duration,
-        });
-
-        // chart-test262-bytecode-performance-tests
-        const byteCodeReferenceChart = entry.tests["test262-bytecode"];
-        const byteCodeChart = charts["test262-bytecode-performance-tests"];
-        const byteCodeResults = byteCodeReferenceChart?.results;
-        if (byteCodeReferenceChart) {
-          chart.metadata.push({
+        if (results) {
+          charts[chart].metadata.push({
             commitTimestamp: entry.commit_timestamp,
             runTimestamp: entry.run_timestamp,
-            duration: referenceChart.duration,
+            duration: entry.tests[chart].duration,
             versions: entry.versions,
-            total: byteCodeResults.total,
+            total: results.total,
           });
-          byteCodeChart.data["duration"].push({
+          for (const testResult in results) {
+            if (testResult === "total") {
+              continue;
+            }
+            charts[chart].data[testResult].push({
+              x: entry.commit_timestamp * 1000,
+              y: results[testResult],
+            });
+          }
+        }
+      }
+
+      const dt = DateTime.fromSeconds(entry.commit_timestamp);
+      if (dt > PERFORMANCE_CHART_START_DATE_TIME) {
+        // chart-test262-performance
+        const performanceTests = entry.tests["test262"];
+        const performanceChart = charts["test262-performance"];
+        const performanceResults = performanceTests?.results;
+        if (performanceResults) {
+          performanceChart.metadata.push({
+            commitTimestamp: entry.commit_timestamp,
+            runTimestamp: entry.run_timestamp,
+            duration: performanceTests.duration,
+            versions: entry.versions,
+            total: performanceResults.total,
+          });
+          performanceChart.data["duration"].push({
             x: entry.commit_timestamp * 1000,
-            y: byteCodeReferenceChart.duration,
+            y: performanceTests.duration,
+          });
+        }
+
+        // chart-test262-bytecode-performance
+        const byteCodePerformanceTests = entry.tests["test262-bytecode"];
+        const byteCodePerformanceChart = charts["test262-bytecode-performance"];
+        const byteCodePerformanceResults = byteCodePerformanceTests?.results;
+        if (byteCodePerformanceResults) {
+          byteCodePerformanceChart.metadata.push({
+            commitTimestamp: entry.commit_timestamp,
+            runTimestamp: entry.run_timestamp,
+            duration: byteCodePerformanceTests.duration,
+            versions: entry.versions,
+            total: byteCodePerformanceResults.total,
+          });
+          byteCodePerformanceChart.data["duration"].push({
+            x: entry.commit_timestamp * 1000,
+            y: byteCodePerformanceTests.duration,
           });
         }
       }
@@ -204,9 +202,7 @@
 
   function initializeChart(
     element,
-    { datasets, metadata },
-    xAxisTitle = "Time",
-    yAxisTitle = "Number of tests"
+    { datasets, metadata, xAxisTitle = "Time", yAxisTitle = "Number of tests" }
   ) {
     const ctx = element.getContext("2d");
 
@@ -372,16 +368,14 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       charts["test262-parser-tests"]
     );
     initializeChart(
-      document.getElementById("chart-test262-performance-tests"),
-      charts["test262-performance-tests"],
-      "Time",
-      TestResultLabels[TestResult.DURATION]
+      document.getElementById("chart-test262-performance"),
+      charts["test262-performance"],
+      { xAxisTitle: "Time", yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     initializeChart(
-      document.getElementById("chart-test262-bytecode-performance-tests"),
-      charts["test262-bytecode-performance-tests"],
-      "Time",
-      TestResultLabels[TestResult.DURATION]
+      document.getElementById("chart-test262-bytecode-performance"),
+      charts["test262-bytecode-performance"],
+      { xAxisTitle: "Time", yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     const last = data.slice(-1)[0];
     initializeSummary(
