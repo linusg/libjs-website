@@ -140,42 +140,44 @@
       }
 
       const dt = DateTime.fromSeconds(entry.commit_timestamp);
-      if (dt > PERFORMANCE_CHART_START_DATE_TIME) {
-        // chart-test262-performance
-        const performanceTests = entry.tests["test262"];
-        const performanceChart = charts["test262-performance"];
-        const performanceResults = performanceTests?.results;
-        if (performanceResults) {
-          performanceChart.metadata.push({
-            commitTimestamp: entry.commit_timestamp,
-            runTimestamp: entry.run_timestamp,
-            duration: performanceTests.duration,
-            versions: entry.versions,
-            total: performanceResults.total,
-          });
-          performanceChart.data["duration"].push({
-            x: entry.commit_timestamp * 1000,
-            y: performanceTests.duration,
-          });
-        }
+      if (dt < PERFORMANCE_CHART_START_DATE_TIME) {
+        continue;
+      }
 
-        // chart-test262-bytecode-performance
-        const byteCodePerformanceTests = entry.tests["test262-bytecode"];
-        const byteCodePerformanceChart = charts["test262-bytecode-performance"];
-        const byteCodePerformanceResults = byteCodePerformanceTests?.results;
-        if (byteCodePerformanceResults) {
-          byteCodePerformanceChart.metadata.push({
-            commitTimestamp: entry.commit_timestamp,
-            runTimestamp: entry.run_timestamp,
-            duration: byteCodePerformanceTests.duration,
-            versions: entry.versions,
-            total: byteCodePerformanceResults.total,
-          });
-          byteCodePerformanceChart.data["duration"].push({
-            x: entry.commit_timestamp * 1000,
-            y: byteCodePerformanceTests.duration,
-          });
-        }
+      // chart-test262-performance
+      const performanceTests = entry.tests["test262"];
+      const performanceChart = charts["test262-performance"];
+      const performanceResults = performanceTests?.results;
+      if (performanceResults) {
+        performanceChart.metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration: performanceTests.duration,
+          versions: entry.versions,
+          total: performanceResults.total,
+        });
+        performanceChart.data["duration"].push({
+          x: entry.commit_timestamp * 1000,
+          y: performanceTests.duration,
+        });
+      }
+
+      // chart-test262-bytecode-performance
+      const byteCodePerformanceTests = entry.tests["test262-bytecode"];
+      const byteCodePerformanceChart = charts["test262-bytecode-performance"];
+      const byteCodePerformanceResults = byteCodePerformanceTests?.results;
+      if (byteCodePerformanceResults) {
+        byteCodePerformanceChart.metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration: byteCodePerformanceTests.duration,
+          versions: entry.versions,
+          total: byteCodePerformanceResults.total,
+        });
+        byteCodePerformanceChart.data["duration"].push({
+          x: entry.commit_timestamp * 1000,
+          y: byteCodePerformanceTests.duration,
+        });
       }
     }
 
