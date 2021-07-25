@@ -118,23 +118,24 @@
     for (const entry of data) {
       for (const chart in charts) {
         const results = entry.tests[chart]?.results;
-        if (results) {
-          charts[chart].metadata.push({
-            commitTimestamp: entry.commit_timestamp,
-            runTimestamp: entry.run_timestamp,
-            duration: entry.tests[chart].duration,
-            versions: entry.versions,
-            total: results.total,
-          });
-          for (const testResult in results) {
-            if (testResult === "total") {
-              continue;
-            }
-            charts[chart].data[testResult].push({
-              x: entry.commit_timestamp * 1000,
-              y: results[testResult],
-            });
+        if (!results) {
+          continue;
+        }
+        charts[chart].metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration: entry.tests[chart].duration,
+          versions: entry.versions,
+          total: results.total,
+        });
+        for (const testResult in results) {
+          if (testResult === "total") {
+            continue;
           }
+          charts[chart].data[testResult].push({
+            x: entry.commit_timestamp * 1000,
+            y: results[testResult],
+          });
         }
       }
 
