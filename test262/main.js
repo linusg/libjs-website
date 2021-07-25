@@ -202,7 +202,8 @@
 
   function initializeChart(
     element,
-    { datasets, metadata, xAxisTitle = "Time", yAxisTitle = "Number of tests" }
+    { datasets, metadata },
+    { xAxisTitle = "Time", yAxisTitle = "Number of tests" } = {}
   ) {
     const ctx = element.getContext("2d");
 
@@ -370,12 +371,12 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
     initializeChart(
       document.getElementById("chart-test262-performance"),
       charts["test262-performance"],
-      { xAxisTitle: "Time", yAxisTitle: TestResultLabels[TestResult.DURATION] }
+      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     initializeChart(
       document.getElementById("chart-test262-bytecode-performance"),
       charts["test262-bytecode-performance"],
-      { xAxisTitle: "Time", yAxisTitle: TestResultLabels[TestResult.DURATION] }
+      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     const last = data.slice(-1)[0];
     initializeSummary(
