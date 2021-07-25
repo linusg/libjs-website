@@ -20,6 +20,10 @@
   Chart.defaults.font.family = fontFamily;
   Chart.defaults.font.size = fontSize;
 
+  // This is when we started running the tests on Idan's self-hosted runner. Before that,
+  // durations varied a lot across runs. See https://github.com/SerenityOS/serenity/pull/7718.
+  const PERFORMANCE_CHART_START_DATE_TIME = DateTime.fromISO("2021-07-04");
+
   const TestResult = {
     PASSED: "passed",
     FAILED: "failed",
@@ -29,6 +33,7 @@
     TIMEOUT_ERROR: "timeout_error",
     PROCESS_ERROR: "process_error",
     RUNNER_EXCEPTION: "runner_exception",
+    DURATION: "duration",
   };
 
   const TestResultColors = {
@@ -61,6 +66,7 @@
     [TestResult.TIMEOUT_ERROR]: "Timed out",
     [TestResult.PROCESS_ERROR]: "Crashed",
     [TestResult.RUNNER_EXCEPTION]: "Unhandled runner exception",
+    [TestResult.DURATION]: "Duration (seconds)",
   };
 
   function prepareDataForCharts(data) {
@@ -78,6 +84,7 @@
               [TestResult.TIMEOUT_ERROR]: [],
               [TestResult.PROCESS_ERROR]: [],
               [TestResult.RUNNER_EXCEPTION]: [],
+              [TestResult.DURATION]: [],
             },
             datasets: [],
             metadata: [],
@@ -92,7 +99,22 @@
         datasets: [],
         metadata: [],
       },
+      ["test262-performance"]: {
+        data: {
+          [TestResult.DURATION]: [],
+        },
+        datasets: [],
+        metadata: [],
+      },
+      ["test262-bytecode-performance"]: {
+        data: {
+          [TestResult.DURATION]: [],
+        },
+        datasets: [],
+        metadata: [],
+      },
     };
+
     for (const entry of data) {
       for (const chart in charts) {
         const results = entry.tests[chart]?.results;
@@ -115,6 +137,47 @@
             y: results[testResult],
           });
         }
+      }
+
+      const dt = DateTime.fromSeconds(entry.commit_timestamp);
+      if (dt < PERFORMANCE_CHART_START_DATE_TIME) {
+        continue;
+      }
+
+      // chart-test262-performance
+      const performanceTests = entry.tests["test262"];
+      const performanceChart = charts["test262-performance"];
+      const performanceResults = performanceTests?.results;
+      if (performanceResults) {
+        performanceChart.metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration: performanceTests.duration,
+          versions: entry.versions,
+          total: performanceResults.total,
+        });
+        performanceChart.data["duration"].push({
+          x: entry.commit_timestamp * 1000,
+          y: performanceTests.duration,
+        });
+      }
+
+      // chart-test262-bytecode-performance
+      const byteCodePerformanceTests = entry.tests["test262-bytecode"];
+      const byteCodePerformanceChart = charts["test262-bytecode-performance"];
+      const byteCodePerformanceResults = byteCodePerformanceTests?.results;
+      if (byteCodePerformanceResults) {
+        byteCodePerformanceChart.metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration: byteCodePerformanceTests.duration,
+          versions: entry.versions,
+          total: byteCodePerformanceResults.total,
+        });
+        byteCodePerformanceChart.data["duration"].push({
+          x: entry.commit_timestamp * 1000,
+          y: byteCodePerformanceTests.duration,
+        });
       }
     }
 
@@ -140,7 +203,11 @@
     return { charts };
   }
 
-  function initializeChart(element, { datasets, metadata }) {
+  function initializeChart(
+    element,
+    { datasets, metadata },
+    { xAxisTitle = "Time", yAxisTitle = "Number of tests" } = {}
+  ) {
     const ctx = element.getContext("2d");
 
     new Chart(ctx, {
@@ -187,7 +254,7 @@
                 const { total } = metadata[dataIndex];
                 const formattedValue = total.toLocaleString("en-US");
                 // Leading spaces to make up for missing color circle
-                return `    Total: ${formattedValue}`;
+                return `    Number of tests: ${formattedValue}`;
               },
               label: (context) => {
                 // Space as padding between color circle and label
@@ -237,7 +304,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
             type: "time",
             title: {
               display: true,
-              text: "Time",
+              text: xAxisTitle,
             },
             grid: {
               borderColor: textColor,
@@ -249,7 +316,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
             stacked: true,
             title: {
               display: true,
-              text: "Number of tests",
+              text: yAxisTitle,
             },
             grid: {
               borderColor: textColor,
@@ -303,6 +370,16 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
     initializeChart(
       document.getElementById("chart-test262-parser-tests"),
       charts["test262-parser-tests"]
+    );
+    initializeChart(
+      document.getElementById("chart-test262-performance"),
+      charts["test262-performance"],
+      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
+    );
+    initializeChart(
+      document.getElementById("chart-test262-bytecode-performance"),
+      charts["test262-bytecode-performance"],
+      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     const last = data.slice(-1)[0];
     initializeSummary(
