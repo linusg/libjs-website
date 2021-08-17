@@ -106,7 +106,21 @@
         datasets: [],
         metadata: [],
       },
+      ["test262-performance-per-test"]: {
+        data: {
+          [TestResult.DURATION]: [],
+        },
+        datasets: [],
+        metadata: [],
+      },
       ["test262-bytecode-performance"]: {
+        data: {
+          [TestResult.DURATION]: [],
+        },
+        datasets: [],
+        metadata: [],
+      },
+      ["test262-bytecode-performance-per-test"]: {
         data: {
           [TestResult.DURATION]: [],
         },
@@ -162,6 +176,25 @@
         });
       }
 
+      // chart-test262-performance-per-test
+      const performancePerTestTests = entry.tests["test262"];
+      const performancePerTestChart = charts["test262-performance-per-test"];
+      const performancePerTestResults = performancePerTestTests?.results;
+      if (performancePerTestResults) {
+        performancePerTestChart.metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration:
+            performancePerTestTests.duration / performancePerTestResults.total,
+          versions: entry.versions,
+          total: performancePerTestResults.total,
+        });
+        performancePerTestChart.data["duration"].push({
+          x: entry.commit_timestamp * 1000,
+          y: performancePerTestTests.duration / performancePerTestResults.total,
+        });
+      }
+
       // chart-test262-bytecode-performance
       const byteCodePerformanceTests = entry.tests["test262-bytecode"];
       const byteCodePerformanceChart = charts["test262-bytecode-performance"];
@@ -177,6 +210,30 @@
         byteCodePerformanceChart.data["duration"].push({
           x: entry.commit_timestamp * 1000,
           y: byteCodePerformanceTests.duration,
+        });
+      }
+
+      // chart-test262-bytecode-performance-per-test
+      const byteCodePerformancePerTestTests = entry.tests["test262-bytecode"];
+      const byteCodePerformancePerTestChart =
+        charts["test262-bytecode-performance-per-test"];
+      const byteCodePerformancePerTestResults =
+        byteCodePerformancePerTestTests?.results;
+      if (byteCodePerformancePerTestResults) {
+        byteCodePerformancePerTestChart.metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration:
+            byteCodePerformancePerTestTests.duration /
+            byteCodePerformancePerTestResults.total,
+          versions: entry.versions,
+          total: byteCodePerformancePerTestResults.total,
+        });
+        byteCodePerformancePerTestChart.data["duration"].push({
+          x: entry.commit_timestamp * 1000,
+          y:
+            byteCodePerformancePerTestTests.duration /
+            byteCodePerformancePerTestResults.total,
         });
       }
     }
@@ -377,8 +434,18 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       { yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     initializeChart(
+      document.getElementById("chart-test262-performance-per-test"),
+      charts["test262-performance-per-test"],
+      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
+    );
+    initializeChart(
       document.getElementById("chart-test262-bytecode-performance"),
       charts["test262-bytecode-performance"],
+      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
+    );
+    initializeChart(
+      document.getElementById("chart-test262-bytecode-performance-per-test"),
+      charts["test262-bytecode-performance-per-test"],
       { yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     const last = data.slice(-1)[0];
