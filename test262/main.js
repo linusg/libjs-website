@@ -316,7 +316,18 @@
               label: (context) => {
                 // Space as padding between color circle and label
                 const formattedValue = context.parsed.y.toLocaleString("en-US");
-                return ` ${context.dataset.label}: ${formattedValue}`;
+                if (
+                  context.dataset.label !==
+                  TestResultLabels[TestResult.DURATION]
+                ) {
+                  const { total } = metadata[context.dataIndex];
+                  const percentOfTotal = Math.floor(
+                    (context.parsed.y / total) * 100
+                  );
+                  return ` ${context.dataset.label}: ${formattedValue} (${percentOfTotal}%)`;
+                } else {
+                  return ` ${context.dataset.label}: ${formattedValue}`;
+                }
               },
 
               footer: (context) => {
