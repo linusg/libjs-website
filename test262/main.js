@@ -246,7 +246,6 @@
           borderColor: chartBorderColor,
           pointRadius: 0,
           pointHoverRadius: 0,
-          tension: 0.1,
           fill: true,
         });
       }
