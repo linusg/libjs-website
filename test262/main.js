@@ -18,6 +18,21 @@
   Chart.defaults.font.family = fontFamily;
   Chart.defaults.font.size = fontSize;
 
+  // place tooltip's origin point under the cursor
+  const tooltipPlugin = Chart.registry.getPlugin("tooltip");
+  tooltipPlugin.positioners.underCursor = function (elements, eventPosition) {
+    const pos = tooltipPlugin.positioners.average(elements);
+
+    if (pos === false) {
+      return false;
+    }
+
+    return {
+      x: pos.x,
+      y: eventPosition.y,
+    };
+  };
+
   // This is when we started running the tests on Idan's self-hosted runner. Before that,
   // durations varied a lot across runs. See https://github.com/SerenityOS/serenity/pull/7718.
   const PERFORMANCE_CHART_START_DATE_TIME = DateTime.fromISO("2021-07-04");
@@ -297,6 +312,7 @@
             boxWidth: 12,
             boxHeight: 12,
             padding: 20,
+            position: "underCursor",
             titleColor: textColor,
             bodyColor: textColor,
             footerColor: textColor,
