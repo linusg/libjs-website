@@ -321,9 +321,10 @@
                   TestResultLabels[TestResult.DURATION]
                 ) {
                   const { total } = metadata[context.dataIndex];
-                  const percentOfTotal = Math.floor(
-                    (context.parsed.y / total) * 100
-                  );
+                  const percentOfTotal = (
+                    (context.parsed.y / total) *
+                    100
+                  ).toFixed(2);
                   return ` ${context.dataset.label}: ${formattedValue} (${percentOfTotal}%)`;
                 } else {
                   return ` ${context.dataset.label}: ${formattedValue}`;
