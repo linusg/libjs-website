@@ -273,6 +273,7 @@
         normalized: true,
         responsive: true,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
           zoom: {
             zoom: {
