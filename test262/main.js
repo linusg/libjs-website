@@ -6,9 +6,7 @@
   const style = getComputedStyle(document.body);
   const backgroundColor = style.getPropertyValue("--color-background");
   const textColor = style.getPropertyValue("--color-text");
-  const chartPointBorderColor = style.getPropertyValue(
-    "--color-chart-point-border"
-  );
+  const chartBorderColor = style.getPropertyValue("--color-chart-border");
   const fontFamily = style.getPropertyValue("font-family");
   const fontSize = parseInt(
     style.getPropertyValue("font-size").slice(0, -2),
@@ -245,11 +243,9 @@
           data: charts[chart].data[testResult],
           backgroundColor: TestResultColors[testResult],
           borderWidth: 2,
-          borderColor: "transparent",
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          pointHitRadius: 4,
-          pointBorderColor: chartPointBorderColor,
+          borderColor: chartBorderColor,
+          pointRadius: 0,
+          pointHoverRadius: 0,
           tension: 0.1,
           fill: true,
         });
@@ -290,8 +286,13 @@
               mode: "x",
             },
           },
+          hover: {
+            mode: "index",
+            intersect: false,
+          },
           tooltip: {
             mode: "index",
+            intersect: false,
             usePointStyle: true,
             boxWidth: 12,
             boxHeight: 12,
@@ -389,7 +390,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
             },
             grid: {
               borderColor: textColor,
-              color: chartPointBorderColor,
+              color: chartBorderColor,
               borderWidth: 2,
             },
           },

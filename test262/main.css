@@ -5,7 +5,7 @@
   --color-text: #312f2f;
   --color-background: #f6fcfc;
   --color-background-alt: #dfecec;
-  --color-chart-point-border: rgba(0, 0, 0, 0.3);
+  --color-chart-border: rgba(0, 0, 0, 0.3);
   --color-chart-passed: #19db6e;
   --color-chart-failed: #f70c4e;
   --color-chart-skipped: #ffca28;
@@ -22,7 +22,7 @@
     --color-text: #dddddd;
     --color-background: #191922;
     --color-background-alt: #262635;
-    --color-chart-point-border: rgba(255, 255, 255, 0.5);
+    --color-chart-border: rgba(255, 255, 255, 0.5);
     --color-chart-passed: #18b55d;
     --color-chart-failed: #c80f43;
     --color-chart-skipped: #ffb300;
