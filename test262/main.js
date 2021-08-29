@@ -33,6 +33,31 @@
     };
   };
 
+  class LineWithVerticalHoverLineController extends Chart.LineController {
+    draw() {
+      super.draw(arguments);
+
+      if (!this.chart.tooltip._active.length) return;
+
+      const { x } = this.chart.tooltip._active[0].element;
+      const { top: topY, bottom: bottomY } = this.chart.chartArea;
+      const ctx = this.chart.ctx;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x, topY);
+      ctx.lineTo(x, bottomY);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = chartBorderColor;
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  LineWithVerticalHoverLineController.id = "lineWithVerticalHoverLine";
+  LineWithVerticalHoverLineController.defaults = Chart.LineController.defaults;
+  Chart.register(LineWithVerticalHoverLineController);
+
   // This is when we started running the tests on Idan's self-hosted runner. Before that,
   // durations varied a lot across runs. See https://github.com/SerenityOS/serenity/pull/7718.
   const PERFORMANCE_CHART_START_DATE_TIME = DateTime.fromISO("2021-07-04");
@@ -278,7 +303,7 @@
     const ctx = element.getContext("2d");
 
     new Chart(ctx, {
-      type: "line",
+      type: "lineWithVerticalHoverLine",
       data: {
         datasets,
       },
