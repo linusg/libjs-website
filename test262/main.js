@@ -425,6 +425,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
           },
           y: {
             stacked: true,
+            beginAtZero: true,
             title: {
               display: true,
               text: yAxisTitle,
