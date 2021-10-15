@@ -67,6 +67,10 @@ p {
   margin: 20px 0;
 }
 
+li {
+  list-style-position: inside;
+}
+
 h1,
 h2 {
   font-family: var(--font-family-heading);
