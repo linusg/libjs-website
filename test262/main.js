@@ -180,13 +180,13 @@
           versions: entry.versions,
           total: results.total,
         });
-        for (const testResult in results) {
-          if (testResult === "total") {
+        for (const testResult in charts[chart].data) {
+          if (testResult === TestResult.DURATION) {
             continue;
           }
           charts[chart].data[testResult].push({
             x: entry.commit_timestamp * 1000,
-            y: results[testResult],
+            y: results[testResult] || 0,
           });
         }
       }
