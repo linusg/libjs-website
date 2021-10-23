@@ -71,6 +71,7 @@
     TIMEOUT_ERROR: "timeout_error",
     PROCESS_ERROR: "process_error",
     RUNNER_EXCEPTION: "runner_exception",
+    TODO_ERROR: "todo_error",
     DURATION: "duration",
   };
 
@@ -93,6 +94,7 @@
     [TestResult.RUNNER_EXCEPTION]: style.getPropertyValue(
       "--color-chart-runner-exception"
     ),
+    [TestResult.TODO_ERROR]: style.getPropertyValue("--color-chart-todo-error"),
   };
 
   const TestResultLabels = {
@@ -104,6 +106,7 @@
     [TestResult.TIMEOUT_ERROR]: "Timed out",
     [TestResult.PROCESS_ERROR]: "Crashed",
     [TestResult.RUNNER_EXCEPTION]: "Unhandled runner exception",
+    [TestResult.TODO_ERROR]: "Test hit a not yet implemented feature",
     [TestResult.DURATION]: "Duration (seconds)",
   };
 
@@ -122,6 +125,7 @@
               [TestResult.TIMEOUT_ERROR]: [],
               [TestResult.PROCESS_ERROR]: [],
               [TestResult.RUNNER_EXCEPTION]: [],
+              [TestResult.TODO_ERROR]: [],
               [TestResult.DURATION]: [],
             },
             datasets: [],
