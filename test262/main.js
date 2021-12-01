@@ -106,7 +106,7 @@
     [TestResult.TIMEOUT_ERROR]: "Timed out",
     [TestResult.PROCESS_ERROR]: "Crashed",
     [TestResult.RUNNER_EXCEPTION]: "Unhandled runner exception",
-    [TestResult.TODO_ERROR]: "Test hit a not yet implemented feature",
+    [TestResult.TODO_ERROR]: "Not yet implemented",
     [TestResult.DURATION]: "Duration (seconds)",
   };
 
@@ -406,10 +406,11 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
             labels: {
               usePointStyle: true,
               boxWidth: 10,
-              // Only include passed, failed, and crashed in the legend
+              // Only include passed, failed, TODO, and crashed in the legend
               filter: ({ text }) =>
                 text === TestResultLabels[TestResult.PASSED] ||
                 text === TestResultLabels[TestResult.FAILED] ||
+                text === TestResultLabels[TestResult.TODO_ERROR] ||
                 text === TestResultLabels[TestResult.PROCESS_ERROR],
             },
           },
