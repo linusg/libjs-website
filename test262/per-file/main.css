@@ -1,0 +1,55 @@
+.hidden {
+  display: none;
+}
+
+.result-separator {
+  height: 60px;
+}
+
+.tree-node-status-container {
+  flex-grow: 2;
+  padding-left: 20px;
+}
+
+.tree-node-status {
+  display: flex;
+  flex-flow: column;
+  text-align: right;
+}
+
+.mode-summary-container {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.mode-bar-container {
+  display: flex;
+  flex-flow: row;
+  width: 25vw;
+}
+
+.mode-result-text {
+  flex-grow: 1;
+  padding-right: 5px;
+}
+
+.tree-node-image {
+  align-self: center;
+}
+
+.tree-node-name {
+  align-self: center;
+  padding-left: 10px;
+}
+
+.tree-node-url {
+  align-self: center;
+  padding-left: 2px;
+}
+
+.node {
+  display: flex;
+  flex-flow: row;
+  padding-bottom: 10px;
+}
