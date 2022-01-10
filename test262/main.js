@@ -3,7 +3,6 @@
 (() => {
   const { DateTime, Duration } = luxon;
 
-  const style = getComputedStyle(document.body);
   const backgroundColor = style.getPropertyValue("--color-background");
   const textColor = style.getPropertyValue("--color-text");
   const chartBorderColor = style.getPropertyValue("--color-chart-border");
@@ -61,54 +60,6 @@
   // This is when we started running the tests on Idan's self-hosted runner. Before that,
   // durations varied a lot across runs. See https://github.com/SerenityOS/serenity/pull/7718.
   const PERFORMANCE_CHART_START_DATE_TIME = DateTime.fromISO("2021-07-04");
-
-  const TestResult = {
-    PASSED: "passed",
-    FAILED: "failed",
-    SKIPPED: "skipped",
-    METADATA_ERROR: "metadata_error",
-    HARNESS_ERROR: "harness_error",
-    TIMEOUT_ERROR: "timeout_error",
-    PROCESS_ERROR: "process_error",
-    RUNNER_EXCEPTION: "runner_exception",
-    TODO_ERROR: "todo_error",
-    DURATION: "duration",
-  };
-
-  const TestResultColors = {
-    [TestResult.PASSED]: style.getPropertyValue("--color-chart-passed"),
-    [TestResult.FAILED]: style.getPropertyValue("--color-chart-failed"),
-    [TestResult.SKIPPED]: style.getPropertyValue("--color-chart-skipped"),
-    [TestResult.METADATA_ERROR]: style.getPropertyValue(
-      "--color-chart-metadata-error"
-    ),
-    [TestResult.HARNESS_ERROR]: style.getPropertyValue(
-      "--color-chart-harness-error"
-    ),
-    [TestResult.TIMEOUT_ERROR]: style.getPropertyValue(
-      "--color-chart-timeout-error"
-    ),
-    [TestResult.PROCESS_ERROR]: style.getPropertyValue(
-      "--color-chart-process-error"
-    ),
-    [TestResult.RUNNER_EXCEPTION]: style.getPropertyValue(
-      "--color-chart-runner-exception"
-    ),
-    [TestResult.TODO_ERROR]: style.getPropertyValue("--color-chart-todo-error"),
-  };
-
-  const TestResultLabels = {
-    [TestResult.PASSED]: "Passed",
-    [TestResult.FAILED]: "Failed",
-    [TestResult.SKIPPED]: "Skipped",
-    [TestResult.METADATA_ERROR]: "Metadata failed to parse",
-    [TestResult.HARNESS_ERROR]: "Harness file failed to parse or run",
-    [TestResult.TIMEOUT_ERROR]: "Timed out",
-    [TestResult.PROCESS_ERROR]: "Crashed",
-    [TestResult.RUNNER_EXCEPTION]: "Unhandled runner exception",
-    [TestResult.TODO_ERROR]: "Not yet implemented",
-    [TestResult.DURATION]: "Duration (seconds)",
-  };
 
   function prepareDataForCharts(data) {
     const charts = {
@@ -533,10 +484,7 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    const headers = new Headers();
-    headers.append("pragma", "no-cache");
-    headers.append("cache-control", "no-cache");
-    fetch(new Request("data/results.json"), { method: "GET", headers })
+    fetchData("data/results.json")
       .then((response) => response.json())
       .then((data) => {
         data.sort((a, b) =>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LibJS test262 per-file results</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="../main.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap"
+    />
+  </head>
+
+  <body>
+    <main>
+      <div>
+        <h2>Results</h2>
+        <div class="mode-summary-container">
+          <span id="summary">Loading...</span>
+          <div class="tree-node-status-container">
+            <span id="summary-status" class="hidden tree-node-status"></span>
+          </div>
+        </div>
+        <div class="result-separator"></div>
+        <ul id="results"></ul>
+      </div>
+    </main>
+    <footer>
+      Made by
+      <a
+        href="https://twitter.com/the_semicolon_"
+        target="_blank"
+        rel="noopener noreferrer"
+        >CxByte</a
+      >
+      &amp;
+      <a
+        href="https://twitter.com/linusgroh"
+        target="_blank"
+        rel="noopener noreferrer"
+        >@linusgroh</a
+      >.
+    </footer>
+    <script src="../test-config.js"></script>
+    <script src="../fetch.js"></script>
+    <script src="main.js"></script>
+    <noscript
+      ><img
+        src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/pixel.gif"
+    /></noscript>
+    <script
+      defer
+      src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/script.js"
+    ></script>
+
+    <template id="leaf-tree-node-template">
+      <li class="node">
+        <img class="tree-node-image" src="js-icon.png" alt="JavaScript Icon" />
+        <span class="tree-node-name"></span>
+        <a class="tree-node-url">open</a>
+        <span class="tree-node-status-container">
+          <div class="tree-node-status"></div>
+        </span>
+      </li>
+    </template>
+    <template id="nonleaf-tree-node-template">
+      <li class="node">
+        <img class="tree-node-image" src="dir-icon.png" alt="Directory Icon" />
+        <span class="tree-node-name"></span>
+        <a class="tree-node-url">open</a>
+        <span class="tree-node-status-container">
+          <div class="tree-node-status"></div>
+        </span>
+      </li>
+    </template>
+  </body>
+</html>
