@@ -5,7 +5,7 @@ let summaryLabel;
 let summaryStatusLabel;
 let leafTreeNodeTemplate;
 let nonLeafTreeNodeTemplate;
-let pathInTree = [];
+let pathInTree = ["test"]; // Don't start at `/`, it only contains `test` anyway.
 let tree;
 const resultsObject = Object.create(null);
 
@@ -100,13 +100,13 @@ function generateResults() {
   generateChildren(resultsNode);
 
   summaryStatusLabel.classList.remove("hidden");
+}
 
-  summaryLabel.onclick = () => {
-    if (pathInTree.length === 0) return;
-
+function goToParentDirectory(count) {
+  for (let i = 0; i < count; ++i) {
     pathInTree.pop();
-    generateChildren(resultsNode);
-  };
+  }
+  generateChildren(resultsNode);
 }
 
 function generateChildren(node) {
@@ -118,12 +118,21 @@ function generateChildren(node) {
   // Generate new ones!
   const results = pathInTree.reduce((acc, x) => acc.children[x], tree);
 
-  const displayPath = "/ " + pathInTree.join(" / ");
-  let summaryHTML =
-    pathInTree.length === 0
-      ? displayPath
-      : `${displayPath}<br>(Click to go one up)`;
-  summaryLabel.innerHTML = summaryHTML;
+  summaryLabel.innerHTML = "/ ";
+  for (let i = 0; i < pathInTree.length; ++i) {
+    const pathSegment = pathInTree[i];
+    const pathSegmentLink = document.createElement("a");
+    pathSegmentLink.textContent = pathSegment;
+    pathSegmentLink.href = "#";
+    pathSegmentLink.onclick = (event) => {
+      event.preventDefault();
+      goToParentDirectory(pathInTree.length - i - 1);
+    };
+    summaryLabel.appendChild(pathSegmentLink);
+    if (i < pathInTree.length - 1) {
+      summaryLabel.insertAdjacentHTML("beforeend", " / ");
+    }
+  }
   summaryStatusLabel.innerHTML = generateStatus(results.aggregatedResults);
 
   Object.keys(results.children)
