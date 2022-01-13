@@ -15,123 +15,141 @@
   <body>
     <main>
       <h1>LibJS test262 results</h1>
-      <p>
-        These are the results of the
-        <a
-          href="https://github.com/SerenityOS/serenity"
-          target="_blank"
-          rel="noopener noreferrer"
-          >SerenityOS</a
-        >
-        JavaScript engine, LibJS, running the official ECMAScript conformance
-        test suite
-        <a
-          href="https://github.com/tc39/test262"
-          target="_blank"
-          rel="noopener noreferrer"
-          >test262</a
-        >
-        as well as the
-        <a
-          href="https://github.com/tc39/test262-parser-tests"
-          target="_blank"
-          rel="noopener noreferrer"
-          >test262 parser tests</a
-        >. All tests are re-run and the results updated automatically for every
-        push to the master branch of the repository on GitHub. Dates and times
-        are shown in your browser's timezone.
-      </p>
-      <p>Some milestones:</p>
-      <ul>
-        <li>
-          Development of the engine started in March 2020 (see
+      <section>
+        <h2>Introduction</h2>
+        <p>
+          These are the results of the
           <a
-            href="https://www.youtube.com/watch?v=byNwCHc_IIM"
+            href="https://github.com/SerenityOS/serenity"
             target="_blank"
             rel="noopener noreferrer"
-            >this YouTube video</a
-          >)
-        </li>
-        <li>
-          Continuous running of test262 started in June 2021 (see
-          <a
-            href="https://github.com/SerenityOS/serenity/pull/7816"
-            target="_blank"
-            rel="noopener noreferrer"
-            >this PR on GitHub</a
-          >) &mdash; results before that time are not available
-        </li>
-        <li>
-          In October 2021
-          <a
-            href="https://github.com/davidot"
-            target="_blank"
-            rel="noopener noreferrer"
-            >David</a
+            >SerenityOS</a
           >
-          reimplemented the test runner to use a streaming architecture (see
+          JavaScript engine, LibJS, running the official ECMAScript conformance
+          test suite
           <a
-            href="https://github.com/linusg/libjs-test262/pull/34"
+            href="https://github.com/tc39/test262"
             target="_blank"
             rel="noopener noreferrer"
-            >this PR on GitHub</a
-          >), resulting in a large performance improvement (the part that looks
-          like a cliff).
-        </li>
-      </ul>
-      <p>
-        The source code of the LibJS test262 runner and aggregation script is
-        available
-        <a
-          href="https://github.com/linusg/libjs-test262"
-          target="_blank"
-          rel="noopener noreferrer"
-          >here</a
-        >, the source code of this website
-        <a
-          href="https://github.com/linusg/libjs-website"
-          target="_blank"
-          rel="noopener noreferrer"
-          >here</a
-        >, and the raw data
-        <a
-          href="https://github.com/linusg/libjs-website/blob/main/test262/data/results.json"
-          target="_blank"
-          rel="noopener noreferrer"
-          >here</a
-        >
-        (JSON).
-      </p>
-      <p>
-        A graphical view of the per-file results is available
-        <a href="per-file" target="_blank" rel="noopener noreferrer">here</a>;
-        the raw data is available
-        <a
-          href="https://github.com/linusg/libjs-website/blob/main/test262/data/per-file-master.json"
-          target="_blank"
-          rel="noopener noreferrer"
-          >here</a
-        >
-        for the AST interpreter, and
-        <a
-          href="https://github.com/linusg/libjs-website/blob/main/test262/data/per-file-master-bytecode.json"
-          target="_blank"
-          rel="noopener noreferrer"
-          >here</a
-        >
-        for the bytecode interpreter.
-      </p>
-      <p>
-        If you have any questions or want to help out with improving these test
-        scores, feel free to get in touch on the
-        <a
-          href="https://discord.gg/serenityos"
-          target="_blank"
-          rel="noopener noreferrer"
-          >SerenityOS Discord server</a
-        >
-        (<code>#js</code>).
-      </p>
+            >test262</a
+          >
+          as well as the
+          <a
+            href="https://github.com/tc39/test262-parser-tests"
+            target="_blank"
+            rel="noopener noreferrer"
+            >test262 parser tests</a
+          >. All tests are re-run and the results updated automatically for
+          every push to the master branch of the repository on GitHub. Dates and
+          times are shown in your browser's timezone.
+        </p>
+        <p>Some milestones:</p>
+        <ul>
+          <li>
+            Development of the engine started in March 2020 (see
+            <a
+              href="https://www.youtube.com/watch?v=byNwCHc_IIM"
+              target="_blank"
+              rel="noopener noreferrer"
+              >this YouTube video</a
+            >)
+          </li>
+          <li>
+            Continuous running of test262 started in June 2021 (see
+            <a
+              href="https://github.com/SerenityOS/serenity/pull/7816"
+              target="_blank"
+              rel="noopener noreferrer"
+              >this PR on GitHub</a
+            >) &mdash; results before that time are not available
+          </li>
+          <li>
+            In October 2021
+            <a
+              href="https://github.com/davidot"
+              target="_blank"
+              rel="noopener noreferrer"
+              >David</a
+            >
+            reimplemented the test runner to use a streaming architecture (see
+            <a
+              href="https://github.com/linusg/libjs-test262/pull/34"
+              target="_blank"
+              rel="noopener noreferrer"
+              >this PR on GitHub</a
+            >), resulting in a large performance improvement (the part that
+            looks like a cliff).
+          </li>
+        </ul>
+        <p>
+          If you have any questions or want to help out with improving these
+          test scores, feel free to get in touch on the
+          <a
+            href="https://discord.gg/serenityos"
+            target="_blank"
+            rel="noopener noreferrer"
+            >SerenityOS Discord server</a
+          >
+          (<code>#js</code>).
+        </p>
+      </section>
+      <section>
+        <h2>Per-file results</h2>
+        <p>
+          <a href="./per-file" target="_blank">Click here!</a>
+        </p>
+      </section>
+      <section>
+        <h2>Source code & Data</h2>
+        <p>Source code:</p>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/linusg/libjs-test262"
+              target="_blank"
+              rel="noopener noreferrer"
+              >LibJS test262 runner and aggregation script</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/linusg/libjs-website"
+              target="_blank"
+              rel="noopener noreferrer"
+              >This website</a
+            >
+          </li>
+        </ul>
+        <p>Data (JSON):</p>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/linusg/libjs-website/blob/main/test262/data/results.json"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Results over time, used for the graphs below</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/linusg/libjs-website/blob/main/test262/data/per-file-master.json"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Per-file results of the <code>master</code> branch (AST
+              Interpreter)</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/linusg/libjs-website/blob/main/test262/data/per-file-master-bytecode.json"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Per-file results of the <code>master</code> branch (Bytecode
+              Interpreter)</a
+            >
+          </li>
+        </ul>
+      </section>
       <section>
         <h2>test262</h2>
         <p id="summary-test262">Loading...</p>
