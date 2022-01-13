@@ -118,7 +118,12 @@ function generateChildren(node) {
   // Generate new ones!
   const results = pathInTree.reduce((acc, x) => acc.children[x], tree);
 
-  summaryLabel.textContent = "/ " + pathInTree.join(" / ");
+  const displayPath = "/ " + pathInTree.join(" / ");
+  let summaryHTML =
+    pathInTree.length === 0
+      ? displayPath
+      : `${displayPath}<br>(Click to go one up)`;
+  summaryLabel.innerHTML = summaryHTML;
   summaryStatusLabel.innerHTML = generateStatus(results.aggregatedResults);
 
   Object.keys(results.children)
