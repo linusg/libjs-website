@@ -34,22 +34,13 @@
   padding-right: 5px;
 }
 
-.tree-node-image {
-  align-self: center;
-}
-
 .tree-node-name {
-  align-self: center;
-  padding-left: 10px;
-}
-
-.tree-node-github-url {
-  align-self: center;
-  padding-left: 2px;
+  margin-left: 10px;
 }
 
 .node {
   display: flex;
   flex-flow: row;
-  padding-bottom: 10px;
+  align-items: center;
+  margin-bottom: 10px;
 }
