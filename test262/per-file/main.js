@@ -206,7 +206,7 @@ function generateStatus(aggregatedResults) {
             ${resultAwareSort(Object.keys(stats))
               .map((x) => {
                 const percentTotal = ((100 * stats[x]) / total).toFixed(2);
-                const toolTip = `${TestResultLabels[x]}: ${percentTotal}%`;
+                const toolTip = `${TestResultLabels[x]}: ${stats[x]} / ${total} (${percentTotal}%)`;
                 const barColor = color(x);
                 return `<div title="${toolTip}" style="width: ${percentTotal}%; height: 20px; background-color: ${barColor}"></div>`;
               })
