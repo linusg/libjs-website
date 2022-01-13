@@ -14,7 +14,7 @@ function initialize(data, modeName) {
   if (modeName === "") {
     mode = "AST";
   } else if (modeName === "-bytecode") {
-    mode = "bytecode";
+    mode = "Bytecode";
   } else {
     throw new Error(`Unknown mode: ${modeName}`);
   }
