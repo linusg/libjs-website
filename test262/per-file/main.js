@@ -1,6 +1,7 @@
 "use strict";
 
 let resultsNode;
+let legendNode;
 let summaryLabel;
 let summaryStatusLabel;
 let leafTreeNodeTemplate;
@@ -8,6 +9,12 @@ let nonLeafTreeNodeTemplate;
 let pathInTree = ["test"]; // Don't start at `/`, it only contains `test` anyway.
 let tree;
 const resultsObject = Object.create(null);
+const legendResults = [
+  TestResult.PASSED,
+  TestResult.FAILED,
+  TestResult.PROCESS_ERROR,
+  TestResult.TODO_ERROR,
+];
 
 function initialize(data, modeName) {
   let mode;
@@ -89,6 +96,7 @@ function generateResults() {
   tree = results;
 
   resultsNode = document.getElementById("results");
+  legendNode = document.getElementById("legend");
   summaryLabel = document.getElementById("summary");
   summaryStatusLabel = document.getElementById("summary-status");
   leafTreeNodeTemplate = document.getElementById("leaf-tree-node-template");
@@ -100,6 +108,19 @@ function generateResults() {
   generateChildren(resultsNode);
 
   summaryStatusLabel.classList.remove("hidden");
+
+  legendNode.innerHTML = legendResults
+    .map((result) => {
+      const color = TestResultColors[result];
+      const label = TestResultLabels[result];
+      return `
+        <span class="legend-item">
+          <span class="legend-circle" style="background-color: ${color};"></span>
+          ${label}
+        </span>
+      `;
+    })
+    .join(" ");
 }
 
 function goToParentDirectory(count) {

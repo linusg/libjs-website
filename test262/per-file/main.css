@@ -2,6 +2,24 @@
   display: none;
 }
 
+#legend {
+  float: right;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.legend-circle {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 100%;
+  margin-right: 5px;
+}
+
 .result-separator {
   height: 60px;
 }
