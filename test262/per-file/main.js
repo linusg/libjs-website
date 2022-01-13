@@ -134,7 +134,7 @@ function generateChildren(node) {
         child.aggregatedResults
       );
       childNode.querySelector(
-        ".tree-node-url"
+        ".tree-node-github-url"
       ).href = `https://github.com/tc39/test262/tree/main/${pathInTree.join(
         "/"
       )}/${childName}`;
