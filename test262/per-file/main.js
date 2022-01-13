@@ -140,14 +140,13 @@ function generateChildren(node) {
       )}/${childName}`;
 
       if (!isLeaf) {
-        childNode
-          .querySelectorAll(".tree-node-name, .tree-node-image")
-          .forEach((childNode) => {
-            childNode.onclick = function () {
-              pathInTree.push(childName);
-              generateChildren(node);
-            };
-          });
+        childNode.querySelectorAll(".tree-node-action").forEach((childNode) => {
+          childNode.onclick = function (event) {
+            event.preventDefault();
+            pathInTree.push(childName);
+            generateChildren(node);
+          };
+        });
       }
     });
 }

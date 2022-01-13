@@ -34,6 +34,11 @@
   padding-right: 5px;
 }
 
+.tree-node-action {
+  display: flex;
+  align-items: center;
+}
+
 .tree-node-name {
   margin-left: 10px;
 }
