@@ -137,7 +137,7 @@ function navigate() {
   history.pushState(
     { pathInTree },
     pathInTree[pathInTree.length - 1],
-    `?path=${pathInTree.join("/")}`
+    generateQueryString(pathInTree)
   );
 }
 
@@ -147,6 +147,10 @@ function goToParentDirectory(count) {
   }
   navigate();
   generateChildren(resultsNode);
+}
+
+function generateQueryString(pathSegments) {
+  return `?path=${pathSegments.join("/")}`;
 }
 
 function generateChildren(node) {
@@ -163,7 +167,7 @@ function generateChildren(node) {
     const pathSegment = pathInTree[i];
     const pathSegmentLink = document.createElement("a");
     pathSegmentLink.textContent = pathSegment;
-    pathSegmentLink.href = "#";
+    pathSegmentLink.href = generateQueryString(pathInTree.slice(0, i + 1));
     pathSegmentLink.onclick = (event) => {
       event.preventDefault();
       goToParentDirectory(pathInTree.length - i - 1);
@@ -194,9 +198,9 @@ function generateChildren(node) {
       )}/${childName}`;
 
       if (!isLeaf) {
-        childNode.querySelector(".tree-node-action").onclick = function (
-          event
-        ) {
+        const actionNode = childNode.querySelector(".tree-node-action");
+        actionNode.href = generateQueryString([...pathInTree, childName]);
+        actionNode.onclick = function (event) {
           event.preventDefault();
           pathInTree.push(childName);
           navigate();
