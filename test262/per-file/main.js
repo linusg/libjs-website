@@ -8,9 +8,9 @@ let summaryLabel;
 let summaryStatusLabel;
 let leafTreeNodeTemplate;
 let nonLeafTreeNodeTemplate;
-let pathInTree =
-  new URL(location.href).searchParams.get("path")?.split("/") ??
-  initialPathInTree;
+let pathInTree = new URL(location.href).searchParams
+  .get("path")
+  ?.split("/") ?? [...initialPathInTree];
 let tree;
 
 const resultsObject = Object.create(null);
@@ -129,7 +129,7 @@ function generateResults() {
 }
 
 window.onpopstate = (event) => {
-  pathInTree = event.state?.pathInTree ?? initialPathInTree;
+  pathInTree = event.state?.pathInTree ?? [...initialPathInTree];
   generateChildren(resultsNode);
 };
 
