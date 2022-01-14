@@ -1,12 +1,17 @@
 "use strict";
 
+const initialPathInTree = ["test"]; // Don't start at `/`, it only contains `test` anyway.
+
 let resultsNode;
 let summaryLabel;
 let summaryStatusLabel;
 let leafTreeNodeTemplate;
 let nonLeafTreeNodeTemplate;
-let pathInTree = ["test"]; // Don't start at `/`, it only contains `test` anyway.
+let pathInTree =
+  new URL(location.href).searchParams.get("path")?.split("/") ??
+  initialPathInTree;
 let tree;
+
 const resultsObject = Object.create(null);
 
 function initialize(data, modeName) {
@@ -102,10 +107,24 @@ function generateResults() {
   summaryStatusLabel.classList.remove("hidden");
 }
 
+window.onpopstate = (event) => {
+  pathInTree = event.state?.pathInTree ?? initialPathInTree;
+  generateChildren(resultsNode);
+};
+
+function navigate() {
+  history.pushState(
+    { pathInTree },
+    pathInTree[pathInTree.length - 1],
+    `?path=${pathInTree.join("/")}`
+  );
+}
+
 function goToParentDirectory(count) {
   for (let i = 0; i < count; ++i) {
     pathInTree.pop();
   }
+  navigate();
   generateChildren(resultsNode);
 }
 
@@ -158,6 +177,7 @@ function generateChildren(node) {
           childNode.onclick = function (event) {
             event.preventDefault();
             pathInTree.push(childName);
+            navigate();
             generateChildren(node);
           };
         });
