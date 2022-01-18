@@ -169,6 +169,7 @@ function generateChildren(node) {
     pathSegmentLink.textContent = pathSegment;
     pathSegmentLink.href = generateQueryString(pathInTree.slice(0, i + 1));
     pathSegmentLink.onclick = (event) => {
+      if (event.metaKey || event.ctrlKey) return;
       event.preventDefault();
       goToParentDirectory(pathInTree.length - i - 1);
     };
@@ -201,6 +202,7 @@ function generateChildren(node) {
         const actionNode = childNode.querySelector(".tree-node-action");
         actionNode.href = generateQueryString([...pathInTree, childName]);
         actionNode.onclick = function (event) {
+          if (event.metaKey || event.ctrlKey) return;
           event.preventDefault();
           pathInTree.push(childName);
           navigate();
