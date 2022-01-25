@@ -153,21 +153,7 @@ function generateQueryString(pathSegments) {
   return `?path=${pathSegments.join("/")}`;
 }
 
-function sortResultsByTypeAndName([lhsName, lhsResult], [rhsName, rhsResult]) {
-  if ((lhsResult.children === null) === (rhsResult.children === null))
-    return lhsName.localeCompare(rhsName);
-  return lhsResult.children === null ? 1 : -1;
-}
-
-function generateChildren(node) {
-  // Drop all children
-  for (const child of Array.prototype.slice.call(node.children)) {
-    child.remove();
-  }
-
-  // Generate new ones!
-  const results = pathInTree.reduce((acc, x) => acc.children[x], tree);
-
+function generateSummary(results) {
   summaryLabel.innerHTML = "/ ";
   for (let i = 0; i < pathInTree.length; ++i) {
     const pathSegment = pathInTree[i];
@@ -185,34 +171,64 @@ function generateChildren(node) {
     }
   }
   summaryStatusLabel.innerHTML = generateStatus(results.aggregatedResults);
+}
+
+function generateChildNode(childName, child, filepath) {
+  const template =
+    child.children === null ? leafTreeNodeTemplate : nonLeafTreeNodeTemplate;
+  const childNode = template.content.children[0].cloneNode(true);
+  childNode.querySelector(".tree-node-name").textContent = childName;
+  childNode.querySelector(".tree-node-status").innerHTML = generateStatus(
+    child.aggregatedResults
+  );
+  childNode.querySelector(
+    ".tree-node-github-url"
+  ).href = `https://github.com/tc39/test262/tree/main/${filepath}`;
+  return childNode;
+}
+
+function makeChildNavigable(childNode, extraPathParts, targetNode) {
+  const actionNode = childNode.querySelector(".tree-node-action");
+
+  actionNode.href = generateQueryString([...pathInTree, ...extraPathParts]);
+  actionNode.onclick = function (event) {
+    if (event.metaKey || event.ctrlKey) return;
+    event.preventDefault();
+    for (const part of extraPathParts) pathInTree.push(part);
+    navigate();
+    generateChildren(targetNode);
+  };
+}
+
+function sortResultsByTypeAndName([lhsName, lhsResult], [rhsName, rhsResult]) {
+  if ((lhsResult.children === null) === (rhsResult.children === null))
+    return lhsName.localeCompare(rhsName);
+  return lhsResult.children === null ? 1 : -1;
+}
+
+function generateChildren(node) {
+  // Drop all children
+  for (const child of Array.prototype.slice.call(node.children)) {
+    child.remove();
+  }
+
+  // Generate new ones!
+  const results = pathInTree.reduce((acc, x) => acc.children[x], tree);
+  generateSummary(results);
 
   Object.entries(results.children)
     .sort(sortResultsByTypeAndName)
     .forEach(([childName, child]) => {
-      const isLeaf = child.children === null;
-      const template = isLeaf ? leafTreeNodeTemplate : nonLeafTreeNodeTemplate;
-      const childNode = template.content.children[0].cloneNode(true);
-      node.appendChild(childNode);
-      childNode.querySelector(".tree-node-name").textContent = childName;
-      childNode.querySelector(".tree-node-status").innerHTML = generateStatus(
-        child.aggregatedResults
+      const childNode = generateChildNode(
+        childName,
+        child,
+        `${pathInTree.join("/")}/${childName}`
       );
-      childNode.querySelector(
-        ".tree-node-github-url"
-      ).href = `https://github.com/tc39/test262/tree/main/${pathInTree.join(
-        "/"
-      )}/${childName}`;
+      node.appendChild(childNode);
 
+      const isLeaf = child.children === null;
       if (!isLeaf) {
-        const actionNode = childNode.querySelector(".tree-node-action");
-        actionNode.href = generateQueryString([...pathInTree, childName]);
-        actionNode.onclick = function (event) {
-          if (event.metaKey || event.ctrlKey) return;
-          event.preventDefault();
-          pathInTree.push(childName);
-          navigate();
-          generateChildren(node);
-        };
+        makeChildNavigable(childNode, [childName], node);
       }
     });
 }
