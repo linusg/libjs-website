@@ -153,6 +153,12 @@ function generateQueryString(pathSegments) {
   return `?path=${pathSegments.join("/")}`;
 }
 
+function sortResultsByTypeAndName([lhsName, lhsResult], [rhsName, rhsResult]) {
+  if ((lhsResult.children === null) === (rhsResult.children === null))
+    return lhsName.localeCompare(rhsName);
+  return lhsResult.children === null ? 1 : -1;
+}
+
 function generateChildren(node) {
   // Drop all children
   for (const child of Array.prototype.slice.call(node.children)) {
@@ -180,10 +186,9 @@ function generateChildren(node) {
   }
   summaryStatusLabel.innerHTML = generateStatus(results.aggregatedResults);
 
-  Object.keys(results.children)
-    .sort()
-    .forEach((childName) => {
-      const child = results.children[childName];
+  Object.entries(results.children)
+    .sort(sortResultsByTypeAndName)
+    .forEach(([childName, child]) => {
       const isLeaf = child.children === null;
       const template = isLeaf ? leafTreeNodeTemplate : nonLeafTreeNodeTemplate;
       const childNode = template.content.children[0].cloneNode(true);
