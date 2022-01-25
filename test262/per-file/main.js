@@ -4,6 +4,7 @@ const initialPathInTree = ["test"]; // Don't start at `/`, it only contains `tes
 
 let resultsNode;
 let legendNode;
+let searchInputNode;
 let summaryLabel;
 let summaryStatusLabel;
 let leafTreeNodeTemplate;
@@ -102,6 +103,7 @@ function generateResults() {
 
   resultsNode = document.getElementById("results");
   legendNode = document.getElementById("legend");
+  searchInputNode = document.getElementById("search-input");
   summaryLabel = document.getElementById("summary");
   summaryStatusLabel = document.getElementById("summary-status");
   leafTreeNodeTemplate = document.getElementById("leaf-tree-node-template");
@@ -126,6 +128,13 @@ function generateResults() {
       `;
     })
     .join(" ");
+
+  searchInputNode.oninput = (event) => {
+    search(resultsNode, event.target.value);
+  };
+
+  // We hide the search input until the rest is loaded
+  document.getElementById("search").style.visibility = null;
 }
 
 window.onpopstate = (event) => {
@@ -134,6 +143,7 @@ window.onpopstate = (event) => {
 };
 
 function navigate() {
+  searchInputNode.value = "";
   history.pushState(
     { pathInTree },
     pathInTree[pathInTree.length - 1],
@@ -231,6 +241,76 @@ function generateChildren(node) {
         makeChildNavigable(childNode, [childName], node);
       }
     });
+}
+
+function search(targetNode, needle) {
+  if (needle.length < 3) {
+    // FIXME: We don't need to generate children if we haven't hit a search yet
+    //        however this is fairly fast and means we don't need to track searches.
+    generateChildren(targetNode);
+    return;
+  }
+
+  needle = needle.toLowerCase();
+
+  for (const child of Array.prototype.slice.call(targetNode.children)) {
+    child.remove();
+  }
+
+  const results = pathInTree.reduce((acc, x) => acc.children[x], tree);
+  generateSummary(results);
+
+  function collectSearchResults(result, allChildren = false, extraPath = "") {
+    return Object.entries(result).flatMap(([childName, child]) => {
+      const isLeaf = child.children === null;
+
+      let isSearchedFor = childName.toLowerCase().includes(needle);
+      let relativePath = extraPath + childName;
+      if (isLeaf) {
+        if (isSearchedFor) return [[relativePath, child]];
+        else return [];
+      }
+
+      const childrenResults = collectSearchResults(
+        child.children,
+        false,
+        relativePath + "/"
+      );
+      if (isSearchedFor) childrenResults.push([relativePath, child]);
+
+      return childrenResults;
+    });
+  }
+
+  const maxResultsShown = 500;
+  const foundResults = collectSearchResults(results.children).sort(
+    sortResultsByTypeAndName
+  );
+  foundResults
+    .filter((_, i) => i < maxResultsShown)
+    .forEach(([relativePath, child]) => {
+      const childNode = generateChildNode(
+        relativePath,
+        child,
+        `${pathInTree.join("/")}/${relativePath}`
+      );
+
+      if (child.children !== null) {
+        const extraPathParts = [
+          ...relativePath.split("/").filter((s) => s.length > 0),
+        ];
+        makeChildNavigable(childNode, extraPathParts, targetNode);
+      }
+
+      targetNode.appendChild(childNode);
+    });
+
+  if (foundResults.length > maxResultsShown) {
+    const extraNode = document.createElement("p");
+    extraNode.innerText = `Only displaying the first ${maxResultsShown} results! In total had ${foundResults.length} results.`;
+    extraNode.classList.add("search-warning");
+    targetNode.appendChild(extraNode);
+  }
 }
 
 function color(name) {

@@ -6,6 +6,24 @@
   float: right;
 }
 
+#search {
+  float: right;
+}
+
+.search-warning {
+  align-content: center;
+  text-align: center;
+  border: solid 1px #4d4d0a;
+  background: #f0db4f;
+}
+
+@media (prefers-color-scheme: dark) {
+  .search-warning {
+    border-color: #f0db4f;
+    background-color: #4d4d0a;
+  }
+}
+
 .legend-item {
   display: inline-flex;
   align-items: center;
