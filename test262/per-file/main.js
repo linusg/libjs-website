@@ -240,6 +240,7 @@ function generateChildNode(childName, child, filepath) {
     child.children === null ? leafTreeNodeTemplate : nonLeafTreeNodeTemplate;
   const childNode = template.content.children[0].cloneNode(true);
   childNode.querySelector(".tree-node-name").textContent = childName;
+  childNode.querySelector(".tree-node-name").title = filepath;
   childNode.querySelector(".tree-node-status").innerHTML = generateStatus(
     child.aggregatedResults
   );
@@ -320,7 +321,7 @@ function regenerateResults(targetNode) {
           let isSearchedFor = childName.toLowerCase().includes(needle);
           let relativePath = extraPath + childName;
           if (isLeaf) {
-            if (isSearchedFor) return [[relativePath, child]];
+            if (isSearchedFor) return [[childName, child, relativePath]];
             else return [];
           }
 
@@ -329,7 +330,8 @@ function regenerateResults(targetNode) {
             false,
             relativePath + "/"
           );
-          if (isSearchedFor) childrenResults.push([relativePath, child]);
+          if (isSearchedFor)
+            childrenResults.push([childName, child, relativePath]);
 
           return childrenResults;
         })
@@ -348,7 +350,7 @@ function regenerateResults(targetNode) {
 
             if (isLeaf) {
               if (isSearchedFor || allChildren)
-                return [relativePath, child, null];
+                return [childName, child, relativePath, null];
               return [];
             }
             const childrenResults = filterInternal(
@@ -359,7 +361,7 @@ function regenerateResults(targetNode) {
             if (!isSearchedFor && childrenResults.length === 0 && !allChildren)
               return [];
 
-            return [relativePath, child, childrenResults];
+            return [childName, child, relativePath, childrenResults];
           })
           .filter((i) => i.length > 0)
           .sort(sortResultsByTypeAndName);
@@ -370,8 +372,8 @@ function regenerateResults(targetNode) {
         pathInTree.join("/").toLowerCase().includes(needle)
       );
 
-      while (results.length === 1 && results[0][2] !== null)
-        results = results[0][2];
+      while (results.length === 1 && results[0][3] !== null)
+        results = results[0][3];
 
       return results;
     }
@@ -382,9 +384,9 @@ function regenerateResults(targetNode) {
       : searchResults(results.children);
     nodes = foundResults
       .filter((_, i) => i < maxResultsShown)
-      .map(([relativePath, child]) => {
+      .map(([childName, child, relativePath]) => {
         const childNode = generateChildNode(
-          relativePath,
+          childName,
           child,
           `${pathInTree.join("/")}/${relativePath}`
         );
