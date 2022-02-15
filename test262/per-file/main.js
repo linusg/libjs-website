@@ -182,8 +182,14 @@ window.onpopstate = (event) => {
   regenerateResults(resultsNode);
 };
 
+// FIXME: Find a way in the UI to toggle this or just stick with either filtering or searching
+let filtering = true;
+
 function navigate() {
-  searchInputNode.value = "";
+  if (!filtering) {
+    searchInputNode.value = "";
+    searchQuery = "";
+  }
   history.pushState(
     { pathInTree },
     pathInTree[pathInTree.length - 1],
@@ -324,8 +330,50 @@ function regenerateResults(targetNode) {
         .sort(sortResultsByTypeAndName);
     }
 
+    function filterResults(result) {
+      function filterInternal(result, allChildren = false, extraPath = "") {
+        return Object.entries(result)
+          .filter(entryHasFilteredResultType)
+          .map(([childName, child]) => {
+            const isLeaf = child.children === null;
+
+            let isSearchedFor = childName.toLowerCase().includes(needle);
+            let relativePath = extraPath + childName;
+
+            if (isLeaf) {
+              if (isSearchedFor || allChildren)
+                return [relativePath, child, null];
+              return [];
+            }
+            const childrenResults = filterInternal(
+              child.children,
+              isSearchedFor,
+              relativePath + "/"
+            );
+            if (!isSearchedFor && childrenResults.length === 0 && !allChildren)
+              return [];
+
+            return [relativePath, child, childrenResults];
+          })
+          .filter((i) => i.length > 0)
+          .sort(sortResultsByTypeAndName);
+      }
+
+      let results = filterInternal(
+        result,
+        pathInTree.join("/").toLowerCase().includes(needle)
+      );
+
+      while (results.length === 1 && results[0][2] !== null)
+        results = results[0][2];
+
+      return results;
+    }
+
     const maxResultsShown = 500;
-    const foundResults = searchResults(results.children);
+    const foundResults = filtering
+      ? filterResults(results.children)
+      : searchResults(results.children);
     nodes = foundResults
       .filter((_, i) => i < maxResultsShown)
       .map(([relativePath, child]) => {
