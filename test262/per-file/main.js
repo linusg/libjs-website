@@ -22,6 +22,13 @@ const legendResults = [
   TestResult.TODO_ERROR,
 ];
 
+const shownResultTypes = new Set(Object.values(TestResult));
+let searchQuery = "";
+
+// Behavior: Initially show all
+//  Click text -> disable that one
+//  Click circle -> show only that one
+
 function initialize(data, modeName) {
   let mode;
   if (modeName === "") {
@@ -112,7 +119,7 @@ function generateResults() {
   );
 
   // Now make a nice lazy-loaded collapsible tree in `resultsNode`.
-  generateChildren(resultsNode);
+  regenerateResults(resultsNode);
 
   summaryStatusLabel.classList.remove("hidden");
 
@@ -121,7 +128,7 @@ function generateResults() {
       const color = TestResultColors[result];
       const label = TestResultLabels[result];
       return `
-        <span class="legend-item">
+        <span class="legend-item" data-type="${result}">
           <span class="legend-circle" style="background-color: ${color};"></span>
           ${label}
         </span>
@@ -129,17 +136,50 @@ function generateResults() {
     })
     .join(" ");
 
+  function legendChanged() {
+    legendNode.querySelectorAll(".legend-item").forEach((legendItem) => {
+      if (shownResultTypes.has(legendItem.getAttribute("data-type")))
+        legendItem.style.textDecoration = null;
+      else legendItem.style.textDecoration = "line-through";
+    });
+  }
+
+  legendNode.querySelectorAll(".legend-item").forEach((legendItem) => {
+    legendItem.onclick = (event) => {
+      const clickedCircle = event.target !== legendItem;
+      const resultType = legendItem.getAttribute("data-type");
+      if (clickedCircle) {
+        if (shownResultTypes.size === 1 && shownResultTypes.has(resultType)) {
+          Object.values(TestResult).forEach((v) => shownResultTypes.add(v));
+        } else {
+          shownResultTypes.clear();
+          shownResultTypes.add(resultType);
+        }
+      } else {
+        if (shownResultTypes.has(resultType)) {
+          shownResultTypes.delete(resultType);
+        } else {
+          shownResultTypes.add(resultType);
+        }
+      }
+
+      legendChanged();
+      regenerateResults(resultsNode);
+    };
+  });
+
   searchInputNode.oninput = (event) => {
-    search(resultsNode, event.target.value);
+    searchQuery = event.target.value.toLowerCase();
+    regenerateResults(resultsNode);
   };
 
   // We hide the search input until the rest is loaded
-  document.getElementById("search").style.visibility = null;
+  document.getElementById("search").classList.remove("hidden");
 }
 
 window.onpopstate = (event) => {
   pathInTree = event.state?.pathInTree ?? [...initialPathInTree];
-  generateChildren(resultsNode);
+  regenerateResults(resultsNode);
 };
 
 function navigate() {
@@ -149,6 +189,7 @@ function navigate() {
     pathInTree[pathInTree.length - 1],
     generateQueryString(pathInTree)
   );
+  regenerateResults(resultsNode);
 }
 
 function goToParentDirectory(count) {
@@ -156,7 +197,6 @@ function goToParentDirectory(count) {
     pathInTree.pop();
   }
   navigate();
-  generateChildren(resultsNode);
 }
 
 function generateQueryString(pathSegments) {
@@ -197,7 +237,7 @@ function generateChildNode(childName, child, filepath) {
   return childNode;
 }
 
-function makeChildNavigable(childNode, extraPathParts, targetNode) {
+function makeChildNavigable(childNode, extraPathParts) {
   const actionNode = childNode.querySelector(".tree-node-action");
 
   actionNode.href = generateQueryString([...pathInTree, ...extraPathParts]);
@@ -206,7 +246,6 @@ function makeChildNavigable(childNode, extraPathParts, targetNode) {
     event.preventDefault();
     for (const part of extraPathParts) pathInTree.push(part);
     navigate();
-    generateChildren(targetNode);
   };
 }
 
@@ -216,42 +255,23 @@ function sortResultsByTypeAndName([lhsName, lhsResult], [rhsName, rhsResult]) {
   return lhsResult.children === null ? 1 : -1;
 }
 
-function generateChildren(node) {
-  // Drop all children
-  for (const child of Array.prototype.slice.call(node.children)) {
-    child.remove();
+// Setting this to false means filters check both AST and BC.
+let checkASTOnly = true;
+
+function entryHasFilteredResultType([, child]) {
+  if (checkASTOnly) {
+    return Object.keys(child.aggregatedResults.AST).some((type) =>
+      shownResultTypes.has(type)
+    );
   }
 
-  // Generate new ones!
-  const results = pathInTree.reduce((acc, x) => acc.children[x], tree);
-  generateSummary(results);
-
-  Object.entries(results.children)
-    .sort(sortResultsByTypeAndName)
-    .forEach(([childName, child]) => {
-      const childNode = generateChildNode(
-        childName,
-        child,
-        `${pathInTree.join("/")}/${childName}`
-      );
-      node.appendChild(childNode);
-
-      const isLeaf = child.children === null;
-      if (!isLeaf) {
-        makeChildNavigable(childNode, [childName], node);
-      }
-    });
+  return Object.values(child.aggregatedResults).some((testType) =>
+    Object.keys(testType).some((type) => shownResultTypes.has(type))
+  );
 }
 
-function search(targetNode, needle) {
-  if (needle.length < 3) {
-    // FIXME: We don't need to generate children if we haven't hit a search yet
-    //        however this is fairly fast and means we don't need to track searches.
-    generateChildren(targetNode);
-    return;
-  }
-
-  needle = needle.toLowerCase();
+function regenerateResults(targetNode) {
+  const needle = searchQuery.length >= 3 ? searchQuery : "";
 
   for (const child of Array.prototype.slice.call(targetNode.children)) {
     child.remove();
@@ -260,57 +280,80 @@ function search(targetNode, needle) {
   const results = pathInTree.reduce((acc, x) => acc.children[x], tree);
   generateSummary(results);
 
-  function collectSearchResults(result, allChildren = false, extraPath = "") {
-    return Object.entries(result).flatMap(([childName, child]) => {
-      const isLeaf = child.children === null;
+  let nodes;
+  if (!needle) {
+    nodes = Object.entries(results.children)
+      .filter(entryHasFilteredResultType)
+      .sort(sortResultsByTypeAndName)
+      .map(([childName, child]) => {
+        const childNode = generateChildNode(
+          childName,
+          child,
+          `${pathInTree.join("/")}/${childName}`
+        );
 
-      let isSearchedFor = childName.toLowerCase().includes(needle);
-      let relativePath = extraPath + childName;
-      if (isLeaf) {
-        if (isSearchedFor) return [[relativePath, child]];
-        else return [];
-      }
+        const isLeaf = child.children === null;
+        if (!isLeaf) {
+          makeChildNavigable(childNode, [childName]);
+        }
+        return childNode;
+      });
+  } else {
+    function searchResults(result, allChildren = false, extraPath = "") {
+      return Object.entries(result)
+        .filter(entryHasFilteredResultType)
+        .flatMap(([childName, child]) => {
+          const isLeaf = child.children === null;
 
-      const childrenResults = collectSearchResults(
-        child.children,
-        false,
-        relativePath + "/"
-      );
-      if (isSearchedFor) childrenResults.push([relativePath, child]);
+          let isSearchedFor = childName.toLowerCase().includes(needle);
+          let relativePath = extraPath + childName;
+          if (isLeaf) {
+            if (isSearchedFor) return [[relativePath, child]];
+            else return [];
+          }
 
-      return childrenResults;
-    });
+          const childrenResults = searchResults(
+            child.children,
+            false,
+            relativePath + "/"
+          );
+          if (isSearchedFor) childrenResults.push([relativePath, child]);
+
+          return childrenResults;
+        })
+        .sort(sortResultsByTypeAndName);
+    }
+
+    const maxResultsShown = 500;
+    const foundResults = searchResults(results.children);
+    nodes = foundResults
+      .filter((_, i) => i < maxResultsShown)
+      .map(([relativePath, child]) => {
+        const childNode = generateChildNode(
+          relativePath,
+          child,
+          `${pathInTree.join("/")}/${relativePath}`
+        );
+
+        if (child.children !== null) {
+          const extraPathParts = [
+            ...relativePath.split("/").filter((s) => s.length > 0),
+          ];
+          makeChildNavigable(childNode, extraPathParts, targetNode);
+        }
+
+        return childNode;
+      });
+
+    if (foundResults.length > maxResultsShown) {
+      const extraNode = document.createElement("p");
+      extraNode.innerText = `Only show the first ${maxResultsShown} of ${foundResults.length} results.`;
+      extraNode.classList.add("search-warning");
+      nodes.push(extraNode);
+    }
   }
 
-  const maxResultsShown = 500;
-  const foundResults = collectSearchResults(results.children).sort(
-    sortResultsByTypeAndName
-  );
-  foundResults
-    .filter((_, i) => i < maxResultsShown)
-    .forEach(([relativePath, child]) => {
-      const childNode = generateChildNode(
-        relativePath,
-        child,
-        `${pathInTree.join("/")}/${relativePath}`
-      );
-
-      if (child.children !== null) {
-        const extraPathParts = [
-          ...relativePath.split("/").filter((s) => s.length > 0),
-        ];
-        makeChildNavigable(childNode, extraPathParts, targetNode);
-      }
-
-      targetNode.appendChild(childNode);
-    });
-
-  if (foundResults.length > maxResultsShown) {
-    const extraNode = document.createElement("p");
-    extraNode.innerText = `Only displaying the first ${maxResultsShown} results! In total had ${foundResults.length} results.`;
-    extraNode.classList.add("search-warning");
-    targetNode.appendChild(extraNode);
-  }
+  nodes.forEach((node) => targetNode.appendChild(node));
 }
 
 function color(name) {
