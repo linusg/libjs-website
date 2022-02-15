@@ -24,6 +24,7 @@ const legendResults = [
 
 const shownResultTypes = new Set(Object.values(TestResult));
 let searchQuery = "";
+let filtering = false;
 
 // Behavior: Initially show all
 //  Click text -> disable that one
@@ -173,17 +174,22 @@ function generateResults() {
     regenerateResults(resultsNode);
   };
 
-  // We hide the search input until the rest is loaded
+  const filterModeCheckbox = document.getElementById("search-mode-checkbox");
+  filterModeCheckbox.checked = filtering;
+  filterModeCheckbox.oninput = (event) => {
+    filtering = event.target.checked;
+    regenerateResults(resultsNode);
+  };
+
+  // We hide the search input and filter mode checkbox until the rest is loaded
   document.getElementById("search").classList.remove("hidden");
+  document.getElementById("search-mode").classList.remove("hidden");
 }
 
 window.onpopstate = (event) => {
   pathInTree = event.state?.pathInTree ?? [...initialPathInTree];
   regenerateResults(resultsNode);
 };
-
-// FIXME: Find a way in the UI to toggle this or just stick with either filtering or searching
-let filtering = true;
 
 function navigate() {
   if (!filtering) {
