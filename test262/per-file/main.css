@@ -10,6 +10,11 @@
   float: right;
 }
 
+#search-mode {
+  float: right;
+  margin-right: 5px;
+}
+
 .search-warning {
   align-content: center;
   text-align: center;
