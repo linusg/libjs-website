@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LibJS test262 per-file results</title>
+    <title>LibWasm spec test per-file results</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
-    <link rel="stylesheet" href="main.css" />
-    <link rel="stylesheet" href="../main.css" />
+    <link rel="stylesheet" href="../../test262/per-file/main.css" />
+    <link rel="stylesheet" href="../../test262/main.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
       rel="stylesheet"
@@ -57,21 +57,20 @@
       &amp; davidot.
     </footer>
     <script src="https://unpkg.com/unfetch/polyfill"></script>
-    <script src="../test-config.js"></script>
-    <script src="../fetch.js"></script>
+    <script src="../../test262/test-config.js"></script>
+    <script src="../../test262/fetch.js"></script>
     <script>
       window.config = {
-        initialPathInTree: "test",
-        loadPathsAndModes: [
-          ["per-file-master.json", ""],
-          ["per-file-bytecode-master.json", "bytecode"],
-        ],
+        InitialPathInTree: "Spec",
+        LoadPathsAndModes: [["per-file-master.json", "Default"]],
         generateGitHubURLFromTestPath(filepath) {
-          return `https://github.com/tc39/test262/tree/main/${filepath}`;
+          const result = /^Spec\/(.*)\.js\/[^:]*::(.*)*$/.exec(filepath);
+          if (!result) return "";
+          return `https://github.com/WebAssembly/testsuite/blob/main/${result[1]}.wast`;
         },
       };
     </script>
-    <script src="main.js"></script>
+    <script src="../../test262/per-file/main.js"></script>
     <noscript
       ><img
         src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/pixel.gif"
@@ -83,7 +82,11 @@
 
     <template id="leaf-tree-node-template">
       <li class="node">
-        <img class="tree-node-image" src="js-icon.png" alt="JavaScript Icon" />
+        <img
+          class="tree-node-image"
+          src="wasm-icon.png"
+          alt="WebAssembly Icon"
+        />
         <span class="tree-node-name"></span>
         &nbsp; (<a
           class="tree-node-github-url"
@@ -101,17 +104,16 @@
         <a class="tree-node-action">
           <img
             class="tree-node-image"
-            src="dir-icon.png"
+            src="../../test262/per-file/dir-icon.png"
             alt="Directory Icon"
           />
           <span class="tree-node-name"></span>
         </a>
-        &nbsp; (<a
+        <a
           class="tree-node-github-url"
           target="_blank"
           rel="noopener noreferrer"
-          >Open on GitHub</a
-        >)
+        ></a>
         <span class="tree-node-status-container">
           <div class="tree-node-status"></div>
         </span>

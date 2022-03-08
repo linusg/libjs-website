@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LibWasm Spec Test results</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="../test262/main.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap"
+    />
+  </head>
+  <body>
+    <main>
+      <h1>LibWasm Spec test results</h1>
+      <section>
+        <h2>Introduction</h2>
+        <p>
+          These are the results of the
+          <a
+            href="https://github.com/SerenityOS/serenity"
+            target="_blank"
+            rel="noopener noreferrer"
+            >SerenityOS</a
+          >
+          WebAssembly library, LibWasm, running the WebAssembly
+          <a
+            href="https://github.com/WebAssembly/testsuite"
+            target="_blank"
+            rel="noopener noreferrer"
+            >testsuite</a
+          >. All tests are re-run and the results updated automatically for
+          every push to the master branch of the repository on GitHub. Dates and
+          times are shown in your browser's timezone.
+        </p>
+        <p>
+          If you have any questions or want to help out with improving these
+          test scores, feel free to get in touch on the
+          <a
+            href="https://discord.gg/serenityos"
+            target="_blank"
+            rel="noopener noreferrer"
+            >SerenityOS Discord server</a
+          >.
+        </p>
+      </section>
+      <section>
+        <h2>Per-file results</h2>
+        <p>
+          <a href="./per-file" target="_blank">Click here!</a>
+        </p>
+      </section>
+      <section>
+        <h2>Source code & Data</h2>
+        <p>Source code:</p>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/SerenityOS/serenity/blob/master/Tests/LibWasm/test-wasm.cpp"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Test Runner</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/SerenityOS/serenity/blob/master/Userland/Libraries/LibWasm"
+              target="_blank"
+              rel="noopener noreferrer"
+              >LibWasm</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/linusg/libjs-website"
+              target="_blank"
+              rel="noopener noreferrer"
+              >This website</a
+            >
+          </li>
+        </ul>
+        <p>Data (JSON):</p>
+        <ul>
+          <li>
+            <a
+              href="https://github.com/linusg/libjs-website/blob/main/wasm/data/results.json"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Results over time, used for the graphs below</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/linusg/libjs-website/blob/main/wasm/data/per-file-master.json"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Per-file results of the <code>master</code> branch</a
+            >
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h2>Results</h2>
+        <p id="summary">Loading...</p>
+        <div class="chart-wrapper">
+          <canvas id="chart"></canvas>
+        </div>
+      </section>
+      <section>
+        <h2>Performance</h2>
+        <div class="chart-wrapper">
+          <canvas id="chart-performance"></canvas>
+        </div>
+      </section>
+      <section>
+        <h2>Performance per test</h2>
+        <div class="chart-wrapper">
+          <canvas id="chart-performance-per-test"></canvas>
+        </div>
+      </section>
+    </main>
+    <footer>
+      Made by
+      <a
+        href="https://twitter.com/the_semicolon_"
+        target="_blank"
+        rel="noopener noreferrer"
+        >CxByte</a
+      >
+      &amp;
+      <a
+        href="https://twitter.com/linusgroh"
+        target="_blank"
+        rel="noopener noreferrer"
+        >@linusgroh</a
+      >.
+    </footer>
+    <script src="https://unpkg.com/unfetch/polyfill"></script>
+    <script src="https://unpkg.com/luxon@1.27.0"></script>
+    <script src="https://unpkg.com/chart.js@3.3.2"></script>
+    <script src="https://unpkg.com/chartjs-adapter-luxon@1.0.0"></script>
+    <script src="https://unpkg.com/hammerjs@2.0.8/hammer.min.js"></script>
+    <script src="https://unpkg.com/chartjs-plugin-zoom@1.0.1"></script>
+    <script src="../test262/test-config.js"></script>
+    <script src="../test262/fetch.js"></script>
+    <script src="main.js"></script>
+    <noscript
+      ><img
+        src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/pixel.gif"
+    /></noscript>
+    <script
+      defer
+      src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/script.js"
+    ></script>
+  </body>
+</html>
