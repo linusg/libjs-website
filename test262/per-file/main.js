@@ -1,6 +1,6 @@
 "use strict";
 
-const initialPathInTree = ["test"]; // Don't start at `/`, it only contains `test` anyway.
+const initialPathInTree = [window.config.initialPathInTree];
 
 let resultsNode;
 let legendNode;
@@ -37,7 +37,7 @@ function initialize(data, modeName) {
   } else if (modeName === "-bytecode") {
     mode = "Bytecode";
   } else {
-    throw new Error(`Unknown mode: ${modeName}`);
+    mode = modeName;
   }
 
   // Do a pass and generate the tree.
@@ -244,9 +244,8 @@ function generateChildNode(childName, child, filepath) {
   childNode.querySelector(".tree-node-status").innerHTML = generateStatus(
     child.aggregatedResults
   );
-  childNode.querySelector(
-    ".tree-node-github-url"
-  ).href = `https://github.com/tc39/test262/tree/main/${filepath}`;
+  childNode.querySelector(".tree-node-github-url").href =
+    window.config.generateGitHubURLFromTestPath(filepath);
   return childNode;
 }
 
@@ -272,7 +271,7 @@ function sortResultsByTypeAndName([lhsName, lhsResult], [rhsName, rhsResult]) {
 let checkASTOnly = true;
 
 function entryHasFilteredResultType([, child]) {
-  if (checkASTOnly) {
+  if (checkASTOnly && "AST" in child.aggregatedResults) {
     return Object.keys(child.aggregatedResults.AST).some((type) =>
       shownResultTypes.has(type)
     );
@@ -467,9 +466,9 @@ function generateStatus(aggregatedResults) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const promises = [];
-  for (const mode of ["", "-bytecode"]) {
+  for (const [path, mode] of window.config.loadPathsAndModes) {
     promises.push(
-      fetchData(`../data/per-file${mode}-master.json`)
+      fetchData(`../data/${path}`)
         .then((response) => response.json())
         .then((data) => initialize(data, mode))
     );
