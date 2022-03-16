@@ -61,8 +61,8 @@
     <script src="../../test262/fetch.js"></script>
     <script>
       window.config = {
-        InitialPathInTree: "Spec",
-        LoadPathsAndModes: [["per-file-master.json", "Default"]],
+        initialPathInTree: "Spec",
+        loadPathsAndModes: [["per-file-master.json", "Default"]],
         generateGitHubURLFromTestPath(filepath) {
           const result = /^Spec\/(.*)\.js\/[^:]*::(.*)*$/.exec(filepath);
           if (!result) return "";
