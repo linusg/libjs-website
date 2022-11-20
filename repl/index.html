@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LibJS REPL</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="/test262/main.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap"
+    />
+  </head>
+
+  <body>
+    <main>
+      <h1>LibJS REPL</h1>
+      <small id="input-editor-tip">press 'ctrl+enter' to run</small>
+      <small id="input-tip" style="display: none">press 'enter' to run</small>
+      <div id="repl">
+        <div id="input">
+          <div id="input-textarea">
+            <textarea large id="input-textarea-editor"></textarea>
+          </div>
+        </div>
+        <button
+          id="input-toggle"
+          class="input-shown"
+          title="Toggle input editor"
+        >
+          &lt;
+        </button>
+        <div id="repl-window">
+          <div id="repl-contents"></div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      Made by
+      <a
+        href="https://twitter.com/the_semicolon_"
+        target="_blank"
+        rel="noopener noreferrer"
+        >CxByte</a
+      >.
+    </footer>
+    <template id="repl-input-template">
+      <div class="repl-input-line">
+        <pre>&gt;</pre>
+        <textarea></textarea>
+      </div>
+    </template>
+    <template id="repl-static-input-template">
+      <div class="repl-input-line">
+        <pre>&gt; </pre>
+        <pre class="content"></pre>
+      </div>
+    </template>
+    <template id="repl-output-template">
+      <div class="repl-output-line">
+        <pre></pre>
+      </div>
+    </template>
+    <noscript
+      ><img
+        src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/pixel.gif"
+    /></noscript>
+    <script
+      defer
+      src="https://shynet.linus.dev/ingress/441b8324-3bdc-423d-b32b-5443edb43a26/script.js"
+    ></script>
+    <script src="https://unpkg.com/unfetch/polyfill"></script>
+    <script src="libjs.js"></script>
+    <script src="repl.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
