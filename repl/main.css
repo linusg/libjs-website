@@ -1,0 +1,89 @@
+:root {
+  --font-size: auto;
+}
+
+textarea {
+  font-family: monospace;
+  background: transparent;
+  outline-style: dashed;
+  outline-width: 2px;
+  outline-color: var(--color-chart-border);
+  outline-offset: 2px;
+  border: none;
+  color: var(--color-text);
+  font-size: var(--font-size);
+}
+
+textarea[large] {
+  height: 80vh;
+  width: 100%;
+}
+
+#input {
+  flex-grow: 1;
+  padding: 4px;
+}
+
+#input-toggle {
+  max-height: 30px;
+  margin-top: 50%;
+  background: var(--color-background);
+  border: 2px solid var(--color-chart-border);
+  color: var(--color-highlight);
+  padding: 2px;
+}
+
+#input-toggle:hover {
+  background: var(--color-highlight);
+  color: var(--color-background);
+}
+
+#input-toggle.input-hidden {
+  margin-right: 2px;
+}
+
+#input-toggle.input-shown {
+  margin-right: 4px;
+  margin-left: 2px;
+}
+
+#repl-window {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+#repl-contents {
+  outline-style: dashed;
+  outline-width: 2px;
+  outline-color: var(--color-chart-border);
+  height: 80vh;
+  padding: 4px;
+  overflow: scroll;
+}
+
+#repl {
+  display: flex;
+  flex-direction: row;
+}
+
+main {
+  margin: 40px 40px;
+}
+
+.repl-input-line {
+  display: flex;
+  flex-direction: row;
+}
+
+.repl-input-line > textarea {
+  flex-grow: 1;
+  margin-right: 8px;
+  margin-top: 8px;
+  margin-left: 8px;
+  min-height: 1rem;
+}
+
+.hovered-related {
+  background-color: var(--color-hover-highlight);
+}
