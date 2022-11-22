@@ -7,9 +7,15 @@ function globalDisplayToUser(text) {
 
 async function createREPL(elements) {
   const repl = Object.create(null);
+  elements.updateLoading("LibJS Runtime", { known: false });
+
   await new Promise((resolve) => addOnPostRun(resolve));
 
-  if (!runtimeInitialized) initRuntime();
+  elements.updateLoading("LibJS WebAssembly Module", { known: false });
+  if (!runtimeInitialized) {
+    initRuntime();
+  }
+
   if (Module._initialize_repl() !== 0)
     throw new Error("Failed to initialize REPL");
 

@@ -16,25 +16,31 @@
 
   <body>
     <main>
-      <h1>LibJS REPL</h1>
-      <small id="input-editor-tip">press 'ctrl+enter' to run</small>
-      <small id="input-tip" style="display: none">press 'enter' to run</small>
-      <div id="repl">
-        <div id="input">
-          <div id="input-textarea">
-            <textarea large id="input-textarea-editor"></textarea>
+      <h1>LibJS REPL<span id="header-description"></span></h1>
+      <div id="main-content" style="display: none">
+        <small id="input-editor-tip">press 'ctrl+enter' to run</small>
+        <small id="input-tip" style="display: none">press 'enter' to run</small>
+        <div id="repl">
+          <div id="input">
+            <div id="input-textarea">
+              <textarea large id="input-textarea-editor"></textarea>
+            </div>
+          </div>
+          <button
+            id="input-toggle"
+            class="input-shown"
+            title="Toggle input editor"
+          >
+            &lt;
+          </button>
+          <div id="repl-window">
+            <div id="repl-contents"></div>
           </div>
         </div>
-        <button
-          id="input-toggle"
-          class="input-shown"
-          title="Toggle input editor"
-        >
-          &lt;
-        </button>
-        <div id="repl-window">
-          <div id="repl-contents"></div>
-        </div>
+      </div>
+      <div id="loading-content">
+        <span id="loading-text">Loading...</span>
+        <progress id="loading-progress"></progress>
       </div>
     </main>
     <footer>
