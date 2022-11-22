@@ -87,3 +87,7 @@ main {
 .hovered-related {
   background-color: var(--color-hover-highlight);
 }
+
+#loading-content {
+  display: grid;
+}
