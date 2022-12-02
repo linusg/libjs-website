@@ -65,7 +65,8 @@ async function createREPL(elements) {
         }
         return true;
       });
-      document.getElementById("run")
+      document
+        .getElementById("run")
         .addEventListener("onclick", () => repl.execute(node, editor.value));
       node.addEventListener("mouseenter", () => {
         node._related.forEach((other) => {
@@ -137,8 +138,8 @@ async function createREPL(elements) {
     input.querySelector("textarea").focus();
   };
   repl.addStaticInput = (text) => {
-    const input =
-      elements.staticInputTemplate.cloneNode(true).content.children[0];
+    const input = elements.staticInputTemplate.cloneNode(true).content
+      .children[0];
     input.querySelector("pre.content").textContent = text;
     input._related = [];
     return elements.outputElement.appendChild(input);
