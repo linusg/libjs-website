@@ -64,25 +64,27 @@
   function prepareDataForCharts(data) {
     const charts = {
       ...Object.fromEntries(
-        ["test262", "test262-bytecode"].map((name) => [
-          name,
-          {
-            data: {
-              [TestResult.PASSED]: [],
-              [TestResult.FAILED]: [],
-              [TestResult.SKIPPED]: [],
-              [TestResult.METADATA_ERROR]: [],
-              [TestResult.HARNESS_ERROR]: [],
-              [TestResult.TIMEOUT_ERROR]: [],
-              [TestResult.PROCESS_ERROR]: [],
-              [TestResult.RUNNER_EXCEPTION]: [],
-              [TestResult.TODO_ERROR]: [],
-              [TestResult.DURATION]: [],
+        ["test262", "test262-bytecode", "test262-bytecode-optimized"].map(
+          (name) => [
+            name,
+            {
+              data: {
+                [TestResult.PASSED]: [],
+                [TestResult.FAILED]: [],
+                [TestResult.SKIPPED]: [],
+                [TestResult.METADATA_ERROR]: [],
+                [TestResult.HARNESS_ERROR]: [],
+                [TestResult.TIMEOUT_ERROR]: [],
+                [TestResult.PROCESS_ERROR]: [],
+                [TestResult.RUNNER_EXCEPTION]: [],
+                [TestResult.TODO_ERROR]: [],
+                [TestResult.DURATION]: [],
+              },
+              datasets: [],
+              metadata: [],
             },
-            datasets: [],
-            metadata: [],
-          },
-        ])
+          ]
+        )
       ),
       ["test262-parser-tests"]: {
         data: {
@@ -114,6 +116,20 @@
         metadata: [],
       },
       ["test262-bytecode-performance-per-test"]: {
+        data: {
+          [TestResult.DURATION]: [],
+        },
+        datasets: [],
+        metadata: [],
+      },
+      ["test262-bytecode-optimized-performance"]: {
+        data: {
+          [TestResult.DURATION]: [],
+        },
+        datasets: [],
+        metadata: [],
+      },
+      ["test262-bytecode-optimized-performance-per-test"]: {
         data: {
           [TestResult.DURATION]: [],
         },
@@ -227,6 +243,52 @@
           y:
             byteCodePerformancePerTestTests.duration /
             byteCodePerformancePerTestResults.total,
+        });
+      }
+
+      // chart-test262-bytecode-optimized-performance
+      const byteCodeOptimizedPerformanceTests =
+        entry.tests["test262-bytecode-optimized"];
+      const byteCodeOptimizedPerformanceChart =
+        charts["test262-bytecode-optimized-performance"];
+      const byteCodeOptimizedPerformanceResults =
+        byteCodeOptimizedPerformanceTests?.results;
+      if (byteCodeOptimizedPerformanceResults) {
+        byteCodeOptimizedPerformanceChart.metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration: byteCodeOptimizedPerformanceTests.duration,
+          versions: entry.versions,
+          total: byteCodeOptimizedPerformanceResults.total,
+        });
+        byteCodeOptimizedPerformanceChart.data["duration"].push({
+          x: entry.commit_timestamp * 1000,
+          y: byteCodeOptimizedPerformanceTests.duration,
+        });
+      }
+
+      // chart-test262-bytecode-optimized-performance-per-test
+      const byteCodeOptimizedPerformancePerTestTests =
+        entry.tests["test262-bytecode-optimized"];
+      const byteCodeOptimizedPerformancePerTestChart =
+        charts["test262-bytecode-optimized-performance-per-test"];
+      const byteCodeOptimizedPerformancePerTestResults =
+        byteCodeOptimizedPerformancePerTestTests?.results;
+      if (byteCodeOptimizedPerformancePerTestResults) {
+        byteCodeOptimizedPerformancePerTestChart.metadata.push({
+          commitTimestamp: entry.commit_timestamp,
+          runTimestamp: entry.run_timestamp,
+          duration:
+            byteCodeOptimizedPerformancePerTestTests.duration /
+            byteCodeOptimizedPerformancePerTestResults.total,
+          versions: entry.versions,
+          total: byteCodeOptimizedPerformancePerTestResults.total,
+        });
+        byteCodeOptimizedPerformancePerTestChart.data["duration"].push({
+          x: entry.commit_timestamp * 1000,
+          y:
+            byteCodeOptimizedPerformancePerTestTests.duration /
+            byteCodeOptimizedPerformancePerTestResults.total,
         });
       }
     }
@@ -436,6 +498,10 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       charts["test262-bytecode"]
     );
     initializeChart(
+      document.getElementById("chart-test262-bytecode-optimized"),
+      charts["test262-bytecode-optimized"]
+    );
+    initializeChart(
       document.getElementById("chart-test262-parser-tests"),
       charts["test262-parser-tests"]
     );
@@ -459,6 +525,18 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       charts["test262-bytecode-performance-per-test"],
       { yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
+    initializeChart(
+      document.getElementById("chart-test262-bytecode-optimized-performance"),
+      charts["test262-bytecode-performance"],
+      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
+    );
+    initializeChart(
+      document.getElementById(
+        "chart-test262-bytecode-optimized-performance-per-test"
+      ),
+      charts["test262-bytecode-performance-per-test"],
+      { yAxisTitle: TestResultLabels[TestResult.DURATION] }
+    );
     const last = data.slice(-1)[0];
     initializeSummary(
       document.getElementById("summary-test262"),
@@ -473,6 +551,13 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
       last.versions.serenity,
       last.tests["test262-bytecode"].duration,
       last.tests["test262-bytecode"].results
+    );
+    initializeSummary(
+      document.getElementById("summary-test262-bytecode-optimized"),
+      last.run_timestamp,
+      last.versions.serenity,
+      last.tests["test262-bytecode-optimized"].duration,
+      last.tests["test262-bytecode-optimized"].results
     );
     initializeSummary(
       document.getElementById("summary-test262-parser-tests"),
