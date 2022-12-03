@@ -34,8 +34,10 @@ function initialize(data, modeName) {
   let mode;
   if (modeName === "") {
     mode = "AST";
-  } else if (modeName === "-bytecode") {
+  } else if (modeName === "bytecode") {
     mode = "Bytecode";
+  } else if (modeName === "bytecode-optimized") {
+    mode = "Optimized Bytecode";
   } else {
     mode = modeName;
   }
