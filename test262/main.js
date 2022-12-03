@@ -527,14 +527,14 @@ test262@${test262Version}, test262-parser-tests@${test262ParserTestsVersion}`;
     );
     initializeChart(
       document.getElementById("chart-test262-bytecode-optimized-performance"),
-      charts["test262-bytecode-performance"],
+      charts["test262-bytecode-optimized-performance"],
       { yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     initializeChart(
       document.getElementById(
         "chart-test262-bytecode-optimized-performance-per-test"
       ),
-      charts["test262-bytecode-performance-per-test"],
+      charts["test262-bytecode-optimized-performance-per-test"],
       { yAxisTitle: TestResultLabels[TestResult.DURATION] }
     );
     const last = data.slice(-1)[0];
