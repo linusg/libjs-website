@@ -16,8 +16,21 @@ async function createREPL(elements) {
     initRuntime();
   }
 
-  if (Module._initialize_repl() !== 0)
+  // The REPL only has access to a limited, virtual file system that does not contain time zone
+  // information. Retrieve the current time zone from the running browser for LibJS to use.
+  let timeZone;
+
+  try {
+    const dateTimeFormat = new Intl.DateTimeFormat();
+    timeZone = Module.allocateUTF8(dateTimeFormat.resolvedOptions().timeZone);
+  } catch {
+    timeZone = Module.allocateUTF8("UTC");
+  }
+
+  if (Module._initialize_repl(timeZone) !== 0)
     throw new Error("Failed to initialize REPL");
+
+  Module._free(timeZone);
 
   repl.private = {
     allowingDirectInput: false,
