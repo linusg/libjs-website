@@ -98,7 +98,7 @@ async function createREPL(elements) {
       let oldRepl = globalDisplayToUser.repl;
       try {
         globalDisplayToUser.repl = repl.private.outputs;
-        Module._execute(encodedText, text.length);
+        Module._execute(encodedText);
         return repl.private.outputs;
       } finally {
         globalDisplayToUser.repl = oldRepl;
