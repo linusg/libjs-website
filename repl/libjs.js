@@ -4221,24 +4221,6 @@ function user_display(string,length){ globalDisplayToUser(UTF8ToString(string, l
   }
   }
 
-  function __timegm_js(tmPtr) {
-      var time = Date.UTC(HEAP32[(((tmPtr)+(20))>>2)] + 1900,
-                          HEAP32[(((tmPtr)+(16))>>2)],
-                          HEAP32[(((tmPtr)+(12))>>2)],
-                          HEAP32[(((tmPtr)+(8))>>2)],
-                          HEAP32[(((tmPtr)+(4))>>2)],
-                          HEAP32[((tmPtr)>>2)],
-                          0);
-      var date = new Date(time);
-  
-      HEAP32[(((tmPtr)+(24))>>2)] = date.getUTCDay();
-      var start = Date.UTC(date.getUTCFullYear(), 0, 1, 0, 0, 0, 0);
-      var yday = ((date.getTime() - start) / (1000 * 60 * 60 * 24))|0;
-      HEAP32[(((tmPtr)+(28))>>2)] = yday;
-  
-      return (date.getTime() / 1000)|0;
-    }
-
   function _tzset_impl(timezone, daylight, tzname) {
       var currentYear = new Date().getFullYear();
       var winter = new Date(currentYear, 0, 1);
@@ -4747,7 +4729,6 @@ var asmLibraryArg = {
   "_mktime_js": __mktime_js,
   "_mmap_js": __mmap_js,
   "_munmap_js": __munmap_js,
-  "_timegm_js": __timegm_js,
   "_tzset_js": __tzset_js,
   "abort": _abort,
   "clock_gettime": _clock_gettime,
@@ -5302,4 +5283,4 @@ if (typeof window == "object" && (typeof ENVIRONMENT_IS_PTHREAD == 'undefined' |
 
   if (typeof Module != 'undefined' && typeof document != 'undefined') emrun_register_handlers();
 }
-Module.SERENITYOS_COMMIT = "3de5dcf383be73ac4a69615318013b2ec863b2f1";
+Module.SERENITYOS_COMMIT = "5049b103c06865ab0de6a20c25acaa4704a04e66";
