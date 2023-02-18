@@ -4737,6 +4737,7 @@ var asmLibraryArg = {
   "getTempRet0": _getTempRet0,
   "getentropy": _getentropy,
   "gettimeofday": _gettimeofday,
+  "invoke_iii": invoke_iii,
   "invoke_iiii": invoke_iiii,
   "invoke_viiii": invoke_viiii,
   "setTempRet0": _setTempRet0,
@@ -4836,6 +4837,17 @@ function invoke_viiii(index,a1,a2,a3,a4) {
   var sp = stackSave();
   try {
     getWasmTableEntry(index)(a1,a2,a3,a4);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_iii(index,a1,a2) {
+  var sp = stackSave();
+  try {
+    return getWasmTableEntry(index)(a1,a2);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -5265,4 +5277,4 @@ if (typeof window == "object" && (typeof ENVIRONMENT_IS_PTHREAD == 'undefined' |
 
   if (typeof Module != 'undefined' && typeof document != 'undefined') emrun_register_handlers();
 }
-Module.SERENITYOS_COMMIT = "6b66e39df443d4be087cb1b9cb1eeba5341811b0";
+Module.SERENITYOS_COMMIT = "f1dd4f42bcd0cf5e9f7fd4c0ffb1d06789a29631";
