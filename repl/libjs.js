@@ -4306,8 +4306,8 @@ var dynCall_viiji = Module["dynCall_viiji"] = createExportWrapper("dynCall_viiji
 /** @type {function(...*):?} */
 var dynCall_jiji = Module["dynCall_jiji"] = createExportWrapper("dynCall_jiji");
 
-var ___start_em_js = Module['___start_em_js'] = 10518052;
-var ___stop_em_js = Module['___stop_em_js'] = 10518143;
+var ___start_em_js = Module['___start_em_js'] = 10518340;
+var ___stop_em_js = Module['___stop_em_js'] = 10518431;
 function invoke_iiii(index,a1,a2,a3) {
   var sp = stackSave();
   try {
@@ -4900,4 +4900,4 @@ if (typeof window == "object" && (typeof ENVIRONMENT_IS_PTHREAD == 'undefined' |
     emrun_register_handlers();
   }
 }
-Module.SERENITYOS_COMMIT = "aff38ae80fb4d3371ada8c9026d8d81bc6325aec";
+Module.SERENITYOS_COMMIT = "40c0dd67dddd958084dc8fc63109410d73e63205";
